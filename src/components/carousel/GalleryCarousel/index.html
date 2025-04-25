@@ -1,0 +1,47 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Redirecting...</title>
+    <script>
+      function handleRedirect() {
+        // Get URL params
+        const urlParams = new URLSearchParams(window.location.search);
+        const type = urlParams.get('type');
+        const product = urlParams.get('product');
+        const price = urlParams.get('price');
+
+        // Construct target URL
+        let targetUrl = '/';
+        if (type === 'order' && product) {
+          targetUrl = `/order?product=${encodeURIComponent(product)}`;
+          if (price) {
+            targetUrl += `&price=${price}`;
+          }
+        } else if (type === 'details' && product) {
+          targetUrl = `/details?product=${encodeURIComponent(product)}`;
+        }
+
+        // Log and redirect
+        console.log('Redirecting to:', targetUrl);
+        window.location.href = targetUrl;
+
+        // Also update the fallback link
+        document.getElementById('redirect-link').href = targetUrl;
+      }
+
+      // Run after DOM is loaded
+      window.onload = handleRedirect;
+    </script>
+  </head>
+  <body>
+    <div style="font-family: sans-serif; padding: 20px; text-align: center">
+      <h2>Redirecting...</h2>
+      <p>
+        If you are not redirected automatically, click
+        <a href="/" id="redirect-link">here</a>.
+      </p>
+    </div>
+  </body>
+</html>

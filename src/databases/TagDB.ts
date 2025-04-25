@@ -1,0 +1,1 @@
+export const TagForUserProfile = 'User_Profile'

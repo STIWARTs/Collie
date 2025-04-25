@@ -1,0 +1,87 @@
+{
+  "json.schemaDownload.enable": true,
+  "diffEditor.ignoreTrimWhitespace": false,
+  "editor.fontVariations": false,
+  "workbench.iconTheme": "material-icon-theme",
+  "editor.mouseWheelZoom": true,
+  "editor.fontFamily": "'Fira Code iScript','Courier New', monospace",
+  "editor.fontSize": 16,
+  "editor.defaultFormatter": "esbenp.prettier-vscode",
+  "workbench.colorTheme": "Night Owl",
+  "editor.bracketPairColorization.enabled": true,
+  "editor.guides.bracketPairs": "active",
+  "files.autoSave": "afterDelay",
+  "git.enableSmartCommit": true,
+  "git.confirmSync": false,
+  "editor.formatOnPaste": false,
+  "editor.formatOnType": false,
+  "editor.formatOnSave": true,
+  "editor.formatOnSaveMode": "file",
+  "editor.tokenColorCustomizations": {
+    "textMateRules": [
+      {
+        "scope": [
+          "comment",
+          "keyword", //import, export, return…
+          "keyword.control",
+          "keyword.control.import.tsx", // for typescript
+          "keyword.control.from.tsx", // for typescript
+          "keyword.control.flow.tsx", // for typescript
+          "storage.type", //class keyword
+          "storage.modifier", //static keyword
+          "storage.type.class.js",
+          "storage.type.js",
+          "support.class.builtin",
+          "constant",
+          "constant.language",
+          "entity.other.attribute-name",
+          "entity.name.method",
+          "entity.name.type.class" //class names
+        ],
+        "settings": {
+          "fontStyle": "italic"
+        }
+      },
+      {
+        "scope": [
+          "invalid",
+          "keyword.operator",
+          "constant.numeric.css",
+          "keyword.other.unit.px.css",
+          "constant.numeric.decimal.js",
+          "constant.numeric.json"
+        ],
+        "settings": {
+          "fontStyle": ""
+        }
+      }
+    ]
+  },
+  "cSpell.words": [
+    "Checkdatabase",
+    "Cryption",
+    "dateofbirth",
+    "Deletedatabase",
+    "Dont",
+    "ecommerce",
+    "emailaddress",
+    "emotionoutfit",
+    "firebasestorage",
+    "Fromdatabase",
+    "googleusercontent",
+    "grecaptcha",
+    "gstatic",
+    "intance",
+    "maxlength",
+    "Mgmt",
+    "Nunito",
+    "Phonecode",
+    "phonenumber",
+    "photourl",
+    "relatability",
+    "SAMEORIGIN",
+    "Tassinari",
+    "Updatedatabase",
+    "USERDB"
+  ]
+}

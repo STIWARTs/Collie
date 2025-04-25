@@ -1,0 +1,48 @@
+{
+  "compilerOptions": {
+    "target": "es5",
+    "lib": ["dom", "dom.iterable", "esnext", "es6"],
+    "allowJs": true,
+    "checkJs": false,
+    "skipLibCheck": true,
+    "strict": true,
+    "forceConsistentCasingInFileNames": true,
+    "noEmit": true,
+    "esModuleInterop": true,
+    "module": "esnext",
+    "moduleResolution": "node",
+    "resolveJsonModule": true,
+    "isolatedModules": true,
+    "jsx": "preserve",
+    "incremental": true,
+    "noImplicitAny": true,
+    "noImplicitThis": true,
+    "strictNullChecks": true,
+    "allowSyntheticDefaultImports": true,
+    "plugins": [
+      {
+        "name": "next"
+      }
+    ],
+    "baseUrl": "src",
+    "paths": {
+      "functions/*": ["functions/*"],
+      "app/*": ["app/*"],
+      "components/*": ["components/*"],
+      "contents/*": ["contents/*"],
+      "contexts/*": ["contexts/*"],
+      "databases/*": ["databases/*"],
+      "firebase/*": ["firebase/*"],
+      "hooks/*": ["hooks/*"],
+      "interfaces/*": ["interfaces/*"],
+      "pages/*": ["pages/*"],
+      "providers/*": ["providers/*"],
+      "routers/*": ["routers/*"],
+      "routerLinks/*": ["routerLinks/*"],
+      "styles/*": ["styles/*"],
+      "utils/*": ["utils/*"]
+    }
+  },
+  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", ".next/types/**/*.ts"],
+  "exclude": ["node_modules"]
+}

@@ -1,0 +1,24 @@
+.navButton {
+  color: white !important;
+  text-transform: uppercase;
+  padding: 6px 8px;
+  font-size: 14px;
+  min-width: 64px;
+}
+
+.navButton:hover {
+  background-color: rgba(255, 255, 255, 0.08);
+}
+
+.activeNavButton {
+  position: relative;
+}
+
+.navIndicator {
+  position: absolute;
+  bottom: 0;
+  left: 25%;
+  width: 50%;
+  height: 2px;
+  background-color: white;
+}

@@ -1,0 +1,108 @@
+.discover_carousel_timer_wrapper {
+  width: 25px;
+  height: 25px;
+  border-radius: 50%;
+  position: absolute;
+  background: transparent;
+  transform: translate3d(-50%, -50%, 0);
+  animation: fade var(--discover-carousel-pie-timer-duration) linear;
+}
+
+.discover_carousel_timer_wrapper,
+.discover_carousel_timer_wrapper * {
+  -moz-box-sizing: border-box;
+  -webkit-box-sizing: border-box;
+  box-sizing: border-box;
+}
+
+.discover_carousel_timer_wrapper .discover_carousel_timer_pie {
+  width: 50%;
+  height: 100%;
+  transform-origin: 100% 50%;
+  position: absolute;
+  background: #ffffff;
+}
+
+.discover_carousel_timer_wrapper .discover_carousel_timer_spinner_mask {
+  background: transparent;
+  overflow: hidden;
+  animation: flip var(--discover-carousel-pie-timer-duration) steps(1, end)
+    infinite reverse;
+}
+
+.discover_carousel_timer_wrapper .discover_carousel_timer_spinner {
+  border-radius: 100% 0 0 100% / 50% 0 0 50%;
+  z-index: 200;
+  width: 100%;
+  border-right: none;
+  animation: rota var(--discover-carousel-pie-timer-duration-half) linear
+    infinite;
+}
+
+.discover_carousel_timer_wrapper:hover .discover_carousel_timer_spinner,
+.discover_carousel_timer_wrapper:hover .discover_carousel_timer_filler,
+.discover_carousel_timer_wrapper:hover .discover_carousel_timer_mask {
+  animation-play-state: running;
+}
+
+.discover_carousel_timer_wrapper .discover_carousel_timer_filler {
+  background-color: #ffffff;
+  border-radius: 0 100% 100% 0 / 0 50% 50% 0;
+  left: 50%;
+  opacity: 0;
+  z-index: 100;
+  animation: opa var(--discover-carousel-pie-timer-duration) steps(1, end)
+    infinite reverse;
+  border-left: none;
+}
+
+.discover_carousel_timer_wrapper .discover_carousel_timer_mask {
+  width: 50%;
+  height: 100%;
+  position: absolute;
+  background: inherit;
+  opacity: 1;
+  z-index: 300;
+  animation: opa var(--discover-carousel-pie-timer-duration) steps(1, end)
+    infinite;
+}
+
+@keyframes rota {
+  0% {
+    transform: rotate(180deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+@keyframes opa {
+  0% {
+    opacity: 1;
+  }
+  50%,
+  100% {
+    opacity: 0;
+  }
+}
+@keyframes flip {
+  0% {
+    overflow: visible;
+    transform: rotate(0deg);
+  }
+  50%,
+  100% {
+    overflow: hidden;
+    transform: rotate(180deg);
+  }
+}
+
+@keyframes fade {
+  0%,
+  100% {
+    opacity: 0;
+  }
+  20%,
+  80% {
+    opacity: 1;
+  }
+}
