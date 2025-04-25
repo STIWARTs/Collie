@@ -7,6 +7,7 @@ import Image from 'next/image';
 
 // Dynamic config
 export const dynamic = 'force-dynamic';
+// Use a numeric revalidation value (in seconds) instead
 export const revalidate = 0;
 
 export default function SignIn() {

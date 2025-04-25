@@ -33,17 +33,14 @@ const nextConfig = {
     // !! WARN !!
     ignoreBuildErrors: true,
   },
+  // Configure dynamic pages
+  output: 'standalone', // This is more suitable for Vercel than 'export'
   serverExternalPackages: ['mongoose'],
   reactStrictMode: true,
   poweredByHeader: false,
   compress: true,
   compiler: {
     removeConsole: process.env.NODE_ENV === 'production',
-  },
-  // Disable static generation for account pages
-  unstable_staticGeneration: {
-    excludePageTypes: ['app'],
-    excludeRoutes: ['/account/**', '/auth/**'],
   },
   images: {
     remotePatterns: [

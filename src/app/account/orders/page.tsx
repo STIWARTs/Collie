@@ -23,6 +23,7 @@ import {
 
 // Dynamic config
 export const dynamic = 'force-dynamic';
+// Use a numeric revalidation value (in seconds) instead
 export const revalidate = 0;
 
 interface TabPanelProps {
