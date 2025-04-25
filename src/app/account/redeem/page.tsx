@@ -20,6 +20,10 @@ import {
 } from '@heroicons/react/24/outline';
 import { useToast } from 'context/ToastContext';
 
+// Dynamic config
+export const dynamic = 'force-dynamic';
+export const revalidate = 0;
+
 export default function RedeemPage() {
   const router = useRouter();
   const { showToast } = useToast();

@@ -40,6 +40,11 @@ const nextConfig = {
   compiler: {
     removeConsole: process.env.NODE_ENV === 'production',
   },
+  // Disable static generation for account pages
+  unstable_staticGeneration: {
+    excludePageTypes: ['app'],
+    excludeRoutes: ['/account/**', '/auth/**'],
+  },
   images: {
     remotePatterns: [
       {

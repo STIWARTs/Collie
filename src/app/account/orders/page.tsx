@@ -21,6 +21,10 @@ import {
   ArrowPathIcon,
 } from '@heroicons/react/24/outline';
 
+// Dynamic config
+export const dynamic = 'force-dynamic';
+export const revalidate = 0;
+
 interface TabPanelProps {
   children?: React.ReactNode;
   index: number;

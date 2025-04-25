@@ -4,6 +4,10 @@ import { useSearchParams } from 'next/navigation';
 import { Button } from '@mui/material';
 import { useRouter } from 'next/navigation';
 
+// Dynamic config
+export const dynamic = 'force-dynamic';
+export const revalidate = 0;
+
 export default function AuthError() {
   const searchParams = useSearchParams();
   const error = searchParams.get('error');

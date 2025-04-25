@@ -5,6 +5,10 @@ import { useRouter } from 'next/navigation';
 import { Button } from '@mui/material';
 import Image from 'next/image';
 
+// Dynamic config
+export const dynamic = 'force-dynamic';
+export const revalidate = 0;
+
 export default function SignIn() {
   const router = useRouter();
 

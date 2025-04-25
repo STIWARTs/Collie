@@ -19,6 +19,10 @@ import { useToast } from 'context/ToastContext';
 import { getAuth, onAuthStateChanged, updatePassword } from 'firebase/auth';
 import { userProfileHook } from 'hooks/global/Hooks.UserProfile';
 
+// Dynamic config
+export const dynamic = 'force-dynamic';
+export const revalidate = 0;
+
 export default function AccountProfilePage() {
   const router = useRouter();
   const { showToast } = useToast();
