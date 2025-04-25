@@ -22,8 +22,15 @@ import { userProfileHook } from 'hooks/global/Hooks.UserProfile';
 export default function AccountProfilePage() {
   const router = useRouter();
   const { showToast } = useToast();
-  const auth = getAuth();
+  // Initialize Firebase auth inside useEffect to prevent SSR issues
+  const [auth, setAuth] = useState<any>(null);
   const userProfile = userProfileHook();
+
+  // Initialize Firebase auth only on client side
+  useEffect(() => {
+    // Dynamically import and initialize Firebase only on client
+    setAuth(getAuth());
+  }, []);
 
   const [userData, setUserData] = useState({
     name: '',
@@ -44,6 +51,9 @@ export default function AccountProfilePage() {
   });
 
   useEffect(() => {
+    // Only run this effect when auth is available
+    if (!auth) return;
+
     const unsubscribe = onAuthStateChanged(auth, async (user) => {
       if (user) {
         try {
@@ -76,7 +86,7 @@ export default function AccountProfilePage() {
     });
 
     return () => unsubscribe();
-  }, []);
+  }, [auth, formData, router, showToast]);
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
@@ -87,6 +97,8 @@ export default function AccountProfilePage() {
   };
 
   const handleUpdateProfile = async () => {
+    if (!auth) return; // Don't proceed if auth is not initialized
+
     try {
       const user = auth.currentUser;
       if (user) {
@@ -115,6 +127,8 @@ export default function AccountProfilePage() {
   };
 
   const handleUpdatePassword = async () => {
+    if (!auth) return; // Don't proceed if auth is not initialized
+
     if (formData.newPassword !== formData.confirmPassword) {
       showToast(
         'Error',
