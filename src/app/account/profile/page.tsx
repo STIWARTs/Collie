@@ -19,11 +19,6 @@ import { useToast } from 'context/ToastContext';
 import { getAuth, onAuthStateChanged, updatePassword } from 'firebase/auth';
 import { userProfileHook } from 'hooks/global/Hooks.UserProfile';
 
-// Dynamic config
-export const dynamic = 'force-dynamic';
-// Use a numeric revalidation value (in seconds) instead
-export const revalidate = 0;
-
 export default function AccountProfilePage() {
   const router = useRouter();
   const { showToast } = useToast();

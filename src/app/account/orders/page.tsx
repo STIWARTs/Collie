@@ -21,11 +21,6 @@ import {
   ArrowPathIcon,
 } from '@heroicons/react/24/outline';
 
-// Dynamic config
-export const dynamic = 'force-dynamic';
-// Use a numeric revalidation value (in seconds) instead
-export const revalidate = 0;
-
 interface TabPanelProps {
   children?: React.ReactNode;
   index: number;
@@ -113,8 +108,8 @@ export default function OrdersPage() {
   };
 
   const handleViewDetails = (orderId: string) => {
-    // In a real app, this would navigate to a detailed order page
-    router.push(`/account/orders/${orderId}`);
+    // Use window.location for dynamic routes that don't match the app's route types
+    window.location.href = `/account/orders/${orderId}`;
   };
 
   const getStatusColor = (status: string) => {

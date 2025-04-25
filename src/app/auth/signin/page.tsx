@@ -5,11 +5,6 @@ import { useRouter } from 'next/navigation';
 import { Button } from '@mui/material';
 import Image from 'next/image';
 
-// Dynamic config
-export const dynamic = 'force-dynamic';
-// Use a numeric revalidation value (in seconds) instead
-export const revalidate = 0;
-
 export default function SignIn() {
   const router = useRouter();
 
@@ -23,7 +18,9 @@ export default function SignIn() {
       if (result?.error) {
         console.error('Sign in error:', result.error);
       } else if (result?.url) {
-        router.push(result.url);
+        // Use window.location.href instead of router.push to avoid TypeScript errors
+        // with dynamic URLs that Next.js can't type-check at build time
+        window.location.href = result.url;
       }
     } catch (error) {
       console.error('Sign in error:', error);
