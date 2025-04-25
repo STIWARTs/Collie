@@ -1,0 +1,20 @@
+# .eslintignore
+
+# Build directories
+.next/
+out/
+dist/
+build/
+
+# Node modules
+node_modules/
+
+# Cache directories
+.vercel/
+.cache/
+
+# Generated files
+*.generated.*
+
+# Public assets
+public/ 
