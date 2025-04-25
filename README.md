@@ -1,14 +1,12 @@
-![emotionoutfit](https://github.com/user-attachments/assets/4d238f38-f95d-4a98-9564-c526e26219f9)
+# Emotion Outfit - Fashion Ecommerce Store
 
-Hello, I am Sumeet Kumar Paul and here is Fashion Ecommerce Store, so let's get started.
-
-Watch the video to learn about all the features of this project: [video/emotionoutfit](https://drive.google.com/file/d/1XbywEe0x5jZPfGj0l0mKpuHk82zqKzP4/view?usp=sharing)
+Developed by May
 
 ## Getting Started
 
-This ecommerce store contains following sections :-
+This ecommerce store contains the following sections:
 
-```bash
+```
 1. Home
 2. Gallery
 3. Shopping List
@@ -23,9 +21,9 @@ This ecommerce store contains following sections :-
 
 ## Tech and Libraries Used
 
-These are all the framework and libraries that has been used to build this project :-
+This project is built with:
 
-```bash
+```
 1. NextJS
 2. MUI
 3. Typescript
@@ -59,15 +57,43 @@ These are all the framework and libraries that has been used to build this proje
 
 ## Functionalities Implemented
 
-These are all the functionalities that has been implemented in this project :-
+Key features implemented in this project:
 
-```bash
+```
 1. Search Box
 2. Search Suggestion
 3. Authentication
 4. Categories Navigation
+5. Product Listings
+6. Shopping Cart
+7. Checkout Process
+8. User Profiles
 ```
 
-## Components Used
+## Recent Updates
 
-All the components - You can find in components folder.
+- Removed unused image directories to reduce repository size
+- Optimized application performance
+- Enhanced mobile responsiveness
+
+## Components
+
+All components can be found in the components folder.
+
+## Installation
+
+```bash
+npm install
+# or
+yarn install
+```
+
+## Running the Application
+
+```bash
+npm run dev
+# or
+yarn dev
+```
+
+Open [http://localhost:3000](http://localhost:3000) in your browser to see the application.
