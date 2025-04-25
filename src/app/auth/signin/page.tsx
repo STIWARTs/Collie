@@ -4,26 +4,49 @@ import { signIn } from 'next-auth/react';
 import { useRouter } from 'next/navigation';
 import { Button } from '@mui/material';
 import Image from 'next/image';
+import { useState } from 'react';
 
 export default function SignIn() {
   const router = useRouter();
+  const [isLoading, setIsLoading] = useState(false);
 
   const handleGoogleSignIn = async () => {
+    if (isLoading) return; // Prevent multiple clicks
+
+    setIsLoading(true);
     try {
+      // Add a console log to help debug
+      console.log('Starting Google sign-in process');
+
       const result = await signIn('google', {
         redirect: false,
         callbackUrl: '/account/profile',
       });
 
+      console.log('Sign-in result:', result);
+
       if (result?.error) {
         console.error('Sign in error:', result.error);
+        // Show the error to the user
+        alert(`Sign-in error: ${result.error}`);
       } else if (result?.url) {
-        // Use window.location.href instead of router.push to avoid TypeScript errors
-        // with dynamic URLs that Next.js can't type-check at build time
+        console.log('Redirecting to:', result.url);
         window.location.href = result.url;
+      } else {
+        console.log('Sign-in completed but no URL returned');
+        // Fallback to direct navigation if no URL is returned
+        window.location.href = '/account/profile';
       }
     } catch (error) {
       console.error('Sign in error:', error);
+      // Show the error to the user
+      alert(
+        `Unexpected error during sign-in: ${
+          error instanceof Error ? error.message : String(error)
+        }`,
+      );
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -41,15 +64,22 @@ export default function SignIn() {
           onClick={handleGoogleSignIn}
           className="flex items-center justify-center space-x-2 bg-white text-black hover:bg-gray-100"
           sx={{ textTransform: 'none', py: 1.5 }}
+          disabled={isLoading}
         >
-          <Image
-            src="/images/google-logo.png"
-            alt="Google"
-            width={20}
-            height={20}
-            className="mr-2"
-          />
-          Sign in with Google
+          {isLoading ? (
+            'Signing in...'
+          ) : (
+            <>
+              <Image
+                src="/images/google-logo.png"
+                alt="Google"
+                width={20}
+                height={20}
+                className="mr-2"
+              />
+              Sign in with Google
+            </>
+          )}
         </Button>
       </div>
     </div>
