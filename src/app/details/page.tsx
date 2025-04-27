@@ -13,7 +13,7 @@ import {
   StarIcon,
   BoltIcon,
 } from '@heroicons/react/24/outline';
-import { MintNFTButton } from 'components/nft/MintNFTButton';
+import MintNFTButton from '../../components/nft/MintNFTButton';
 import dynamic from 'next/dynamic';
 import {
   DiscoverSliderContent,

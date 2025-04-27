@@ -1,12 +1,11 @@
 'use client';
 
-import { DeviceHook } from 'hooks/global/Hooks.Device';
+import { useScreenDimensions } from '../../../hooks/useScreenDimensions';
 import Footer from 'components/footer/Footer';
 import Header from 'components/header/Header';
-import HeaderMobile from 'components/header/Header.Mobile';
 
 function HomeAndGalleryChildLayout({ children }: ChildrenType) {
-  const { isMobile } = DeviceHook();
+  const { isMobile } = useScreenDimensions();
 
   function Children() {
     return <div className="z-auto w-full">{children}</div>;
@@ -15,9 +14,8 @@ function HomeAndGalleryChildLayout({ children }: ChildrenType) {
   if (isMobile)
     return (
       <main className="z-auto mx-auto w-full">
-        <HeaderMobile />
         <Children />
-        {/* <FooterMobile /> */}
+        <Footer />
       </main>
     );
 

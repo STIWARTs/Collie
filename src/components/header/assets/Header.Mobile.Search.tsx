@@ -109,7 +109,7 @@ function HeaderMobileSearch(props: HeaderMobileSearchProps) {
               autoCorrect="off"
               autoComplete="off"
               placeholder="Search by Products & Collections"
-              className="mx-3 flex h-full w-full truncate bg-transparent pb-[14px] pt-[12px] text-[14px] text-white outline-none placeholder:text-[13px] placeholder:text-[#ffffffad]"
+              className="text-size-14 mx-3 flex h-full w-full truncate bg-transparent pb-[14px] pt-[12px] text-white outline-none placeholder:text-[13px] placeholder:text-[#ffffffad]"
             />
             {Search === '' ? (
               <IconButton

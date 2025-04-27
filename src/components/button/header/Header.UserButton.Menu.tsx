@@ -109,7 +109,7 @@ function HeaderUserButtonMenu(props: HeaderUserButtonMenuProps) {
       >
         <div className="relative flex space-x-[10px] opacity-90">
           <Image height={17} width={17} src="/icons/folder.svg" alt="" />
-          <h6 className="font-sans text-[14px] font-[400] text-white">
+          <h6 className="font-sans text-size-14 font-[400] text-white">
             Manage your account
           </h6>
         </div>
@@ -126,7 +126,7 @@ function HeaderUserButtonMenu(props: HeaderUserButtonMenuProps) {
       >
         <div className="relative flex space-x-[10px] opacity-90">
           <Image height={18} width={18} src="/icons/truck.svg" alt="" />
-          <h6 className="font-sans text-[14px] font-[400] text-white">
+          <h6 className="font-sans text-size-14 font-[400] text-white">
             Track orders
           </h6>
         </div>
@@ -143,7 +143,7 @@ function HeaderUserButtonMenu(props: HeaderUserButtonMenuProps) {
       >
         <div className="relative flex space-x-[10px] opacity-90">
           <Image height={17} width={17} src="/icons/shopping-bag.svg" alt="" />
-          <h6 className="font-sans text-[14px] font-[400] text-white">
+          <h6 className="font-sans text-size-14 font-[400] text-white">
             View all orders
           </h6>
         </div>
@@ -160,7 +160,7 @@ function HeaderUserButtonMenu(props: HeaderUserButtonMenuProps) {
       >
         <div className="relative flex space-x-[10px] opacity-90">
           <Image height={17} width={17} src="/icons/gift.svg" alt="" />
-          <h6 className="font-sans text-[14px] font-[400] text-white">
+          <h6 className="font-sans text-size-14 font-[400] text-white">
             Redeem code or gift cards
           </h6>
         </div>

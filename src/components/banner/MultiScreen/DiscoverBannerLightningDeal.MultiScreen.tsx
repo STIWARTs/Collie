@@ -5,7 +5,7 @@ import { Poster_BlurDataURL } from 'components/loading/BlurDataURL';
 import useScreenSize from 'functions/ScreenSizeDetection';
 
 const HeadingStyle =
-  'text-[14px] w-full font-normal text-left overflow-hidden whitespace-nowrap text-ellipsis';
+  'text-size-14 w-full font-normal text-left overflow-hidden whitespace-nowrap text-ellipsis';
 const DescriptionStyle =
   'text-[13px] whitespace-normal leading-[18px] font-sans font-normal text-left w-full opacity-70 whitespace-nowrap overflow-hidden text-ellipsis';
 const AvailableStyle =
@@ -29,39 +29,37 @@ export function DiscoverBannerLightningDealBrowser(props: IProps) {
         LargeScreen
           ? 5
           : MediumLargeScreen
-          ? 4
-          : MediumScreen
-          ? 3
-          : SmallMediumScreen
-          ? 2
-          : 0,
+            ? 4
+            : MediumScreen
+              ? 3
+              : SmallMediumScreen
+                ? 2
+                : 0,
       ).map((value, index) => (
         <motion.li
           whileTap={{ scale: 0.9 }}
           key={index}
           className={ContainerStyle}
         >
-          <Image
-            className="rounded-xl"
-            height={320}
-            width={240}
-            style={{
-              objectFit: 'cover',
-              objectPosition: 'center',
-            }}
-            src={value.Image}
-            placeholder="blur"
-            blurDataURL={Poster_BlurDataURL}
-            alt=""
-          />
-          {/* {value.Available ? (
-            <h6 className={`${'bg-primary-blue-rgb'} ${AvailableStyle}`}>
-              Order Now
-            </h6>
-          ) : (
-            <h6 className={`${'bg-[#0f0f0f]'} ${AvailableStyle}`}>Sold Out</h6>
-          )} */}
-          <div className="mt-3 space-y-1 overflow-hidden text-white">
+          <div className="relative h-full w-full">
+            <Image
+              className="rounded-xl"
+              height={320}
+              width={240}
+              style={{
+                objectFit: 'cover',
+                objectPosition: 'center',
+              }}
+              src={value.Image}
+              placeholder="blur"
+              blurDataURL={Poster_BlurDataURL}
+              alt=""
+              unoptimized={true}
+            />
+            <div className="absolute inset-0 rounded-xl bg-gradient-to-b from-transparent via-[rgba(0,0,0,0.5)] to-[rgba(0,0,0,0.8)]"></div>
+          </div>
+
+          <div className="absolute bottom-0 left-0 right-0 z-10 p-4 text-white">
             <h6 className={HeadingStyle}>{value.Heading}</h6>
             <h6 className={DescriptionStyle}>{value.Description}</h6>
             <div className="flex items-center space-x-2 pt-1 text-xs">

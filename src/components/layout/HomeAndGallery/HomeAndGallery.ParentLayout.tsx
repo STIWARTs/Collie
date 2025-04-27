@@ -1,15 +1,22 @@
-'use client'
+'use client';
 
 import { useState } from 'react';
-import { DeviceHook } from 'hooks/global/Hooks.Device';
+import { useScreenDimensions } from '../../../hooks/useScreenDimensions';
 import SidePanel from 'components/sidepanel/SidePanel';
 import ContainerDark from 'components/container/ContainerDark';
+import ResponsiveLayout from '../ResponsiveLayout';
 
 function HomeAndGalleryParentLayout({ children }: ChildrenType) {
   const [Active, setActive] = useState('Home');
-  const { isMobile } = DeviceHook();
+  const { isMobile } = useScreenDimensions();
 
-  if (isMobile) return <ContainerDark>{children}</ContainerDark>;
+  if (isMobile) {
+    return (
+      <ResponsiveLayout>
+        <ContainerDark>{children}</ContainerDark>
+      </ResponsiveLayout>
+    );
+  }
 
   return (
     <ContainerDark>

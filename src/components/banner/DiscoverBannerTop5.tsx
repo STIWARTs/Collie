@@ -74,7 +74,26 @@ function DiscoverBannerTop5(props: IProps) {
             Top 5 - Trends of the week
           </div>
           <div className="text-[13px] font-[300] tracking-wide text-white opacity-[0.85]">
-            Make your creative vision a reality with these AI-powered effects
+            Discover the hottest fashion items making waves on social media
+          </div>
+          <div className="mt-2">
+            <Button className="button-text-lower flex items-center rounded-md border border-white/20 px-4 py-2 text-sm font-medium text-white hover:bg-white/10">
+              <span className="mr-1">See details</span>
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                fill="none"
+                viewBox="0 0 24 24"
+                strokeWidth={1.5}
+                stroke="currentColor"
+                className="h-4 w-4"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  d="M8.25 4.5l7.5 7.5-7.5 7.5"
+                />
+              </svg>
+            </Button>
           </div>
         </div>
         {/* Content */}
@@ -94,7 +113,7 @@ function DiscoverBannerTop5(props: IProps) {
           {props.ContentArray.map((value, idx) => (
             <li
               key={idx}
-              className="button-text-lower relative flex min-w-[299px] cursor-default"
+              className="button-text-lower relative mr-5 flex min-w-[299px] cursor-default"
             >
               <div className="relative z-[2] -ml-[15px] -mr-[45px] flex items-center">
                 <div
@@ -125,10 +144,11 @@ function DiscoverBannerTop5(props: IProps) {
                     borderRadius: 15,
                   }}
                   alt=""
+                  unoptimized={true}
                 />
                 <div className="absolute z-[1] flex h-full w-full items-center justify-start bg-gradient-to-r from-primary-theme/80 pl-14">
                   <div className="block max-w-[75%] text-start text-[16px] font-[500] tracking-wide text-white">
-                    Trends of the week Heading 1
+                    {value.Heading}
                   </div>
                 </div>
               </Button>

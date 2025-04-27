@@ -1,5 +1,6 @@
 import 'app/globals.css';
 import 'styles/main.css';
+import 'styles/mobile.css';
 import 'swiper/css';
 import 'swiper/css/navigation';
 import 'swiper/css/pagination';
@@ -8,6 +9,9 @@ import { Metadata, Viewport } from 'next';
 import dynamic from 'next/dynamic';
 import { Suspense } from 'react';
 import Web3ProviderWrapper from '../components/Web3ProviderWrapper';
+
+// Debug environment variables
+import DebugEnv from '../debug-env';
 
 // Dynamically import providers to reduce initial bundle size
 const CssVarsProvider = dynamic(() => import('providers/CssVarsProvider'), {
@@ -38,6 +42,11 @@ const ToastProvider = dynamic(() => import('../context/ToastContext'), {
   ssr: true,
 });
 
+// Import ClientWalletProvider
+const ClientWalletProvider = dynamic(() => import('../components/providers/ClientWalletProvider'), {
+  ssr: true,
+});
+
 export const metadata: Metadata = {
   title: 'Collie • Fashion Redefined',
   description: 'Welcome to Collie - Your Personal Fashion Assistant',
@@ -55,6 +64,9 @@ export const viewport: Viewport = {
   initialScale: 1,
   width: 'device-width',
   viewportFit: 'cover',
+  maximumScale: 5,
+  minimumScale: 1,
+  userScalable: true,
 };
 
 function RootLayout({ children }: ChildrenType) {
@@ -92,10 +104,13 @@ function RootLayout({ children }: ChildrenType) {
               <Web3ProviderWrapper>
                 <CartWrapper>
                   <ToastProvider>
-                    <Suspense fallback={null}>{children}</Suspense>
-                    <Suspense fallback={null}>
-                      <AIButtonWrapper />
-                    </Suspense>
+                    <ClientWalletProvider>
+                      <Suspense fallback={null}>{children}</Suspense>
+                      <Suspense fallback={null}>
+                        <AIButtonWrapper />
+                      </Suspense>
+                      <DebugEnv />
+                    </ClientWalletProvider>
                   </ToastProvider>
                 </CartWrapper>
               </Web3ProviderWrapper>

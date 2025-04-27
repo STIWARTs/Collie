@@ -213,7 +213,9 @@
   position: absolute;
   background: #fff;
   opacity: 0;
-  transition: width 0.3s ease 0s, left 0.3s ease 0s;
+  transition:
+    width 0.3s ease 0s,
+    left 0.3s ease 0s;
   width: 29%;
 }
 
@@ -285,5 +287,88 @@
     max-height: 800px;
     width: calc(100vw - 100px);
     transition: all 0.25s ease-in;
+  }
+}
+
+/* Mobile Responsiveness Improvements */
+@media screen and (max-width: 768px) {
+  /* Improve sidebar spacing and layout */
+  .mx-2 {
+    margin-left: 0.5rem !important;
+    margin-right: 0.5rem !important;
+  }
+
+  /* Make shopping list more compact on mobile */
+  .shopping-list-item {
+    padding: 0.5rem !important;
+  }
+
+  /* Fix navigation elements on mobile */
+  .navLinks:after {
+    left: 25% !important;
+    width: 40% !important;
+  }
+
+  .navLinks:hover:after {
+    width: 50% !important;
+    left: 25% !important;
+  }
+
+  /* Fix card sizing on mobile */
+  .card-container {
+    max-width: 100% !important;
+    width: 100% !important;
+  }
+
+  /* Make sure images don't overflow */
+  img {
+    max-width: 100%;
+    height: auto;
+  }
+
+  /* Remove any fixed widths that might cause overflow */
+  .w-full {
+    width: 100% !important;
+    max-width: 100vw !important;
+    overflow-x: hidden !important;
+  }
+
+  /* Adjust text sizes */
+  .text-size-14 {
+    font-size: 12px !important;
+  }
+
+  /* Improve navigation padding */
+  .py-5 {
+    padding-top: 1rem !important;
+    padding-bottom: 1rem !important;
+  }
+
+  /* Fix sidebar panel on mobile */
+  .sidepanel-mobile {
+    width: 100% !important;
+    max-width: 100vw !important;
+    overflow-x: hidden !important;
+    padding-right: 0.5rem !important;
+  }
+}
+
+/* Specific fixes for very small screens */
+@media screen and (max-width: 375px) {
+  /* Even more compact view */
+  .mx-2 {
+    margin-left: 0.25rem !important;
+    margin-right: 0.25rem !important;
+  }
+
+  /* Smaller text */
+  .text-size-14 {
+    font-size: 11px !important;
+  }
+
+  /* Reduce padding further */
+  .py-5 {
+    padding-top: 0.75rem !important;
+    padding-bottom: 0.75rem !important;
   }
 }

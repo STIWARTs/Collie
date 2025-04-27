@@ -121,22 +121,23 @@ const AIChatModal: React.FC<AIChatModalProps> = ({ isOpen, onClose }) => {
     <AnimatePresence>
       {isOpen && (
         <motion.div
-          className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 p-4"
+          className="fixed inset-0 z-50 flex items-end justify-end p-0 sm:p-4"
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           exit={{ opacity: 0 }}
           onClick={onClose}
         >
           <motion.div
-            className="w-full max-w-2xl overflow-hidden rounded-2xl bg-white shadow-xl"
-            initial={{ scale: 0.9, opacity: 0 }}
-            animate={{ scale: 1, opacity: 1 }}
-            exit={{ scale: 0.9, opacity: 0 }}
+            className="w-full max-w-sm overflow-hidden rounded-t-2xl rounded-b-none bg-gray-900 shadow-xl sm:max-w-md sm:rounded-2xl"
+            initial={{ x: '100%', opacity: 0 }}
+            animate={{ x: 0, opacity: 1 }}
+            exit={{ x: '100%', opacity: 0 }}
+            transition={{ type: 'spring', damping: 25, stiffness: 300 }}
             onClick={(e) => e.stopPropagation()}
           >
-            <div className="flex items-center justify-between bg-gradient-to-r from-[#7928CA] to-[#FF0080] p-4 text-white">
-              <div className="flex items-center gap-3">
-                <div className="relative h-10 w-10 overflow-hidden rounded-full bg-white/20">
+            <div className="flex items-center justify-between bg-gradient-to-r from-[#7928CA] to-[#FF0080] p-3 text-white">
+              <div className="flex items-center gap-2">
+                <div className="relative h-8 w-8 overflow-hidden rounded-full bg-white/20">
                   <svg
                     className="absolute inset-0 h-full w-full p-1 text-white"
                     viewBox="0 0 24 24"
@@ -150,7 +151,7 @@ const AIChatModal: React.FC<AIChatModalProps> = ({ isOpen, onClose }) => {
                   </svg>
                 </div>
                 <div>
-                  <h3 className="text-lg font-bold">Collie Assistant</h3>
+                  <h3 className="text-base font-bold">Collie Assistant</h3>
                   <p className="text-xs text-white/70">
                     Fashion expert at your service
                   </p>
@@ -162,8 +163,8 @@ const AIChatModal: React.FC<AIChatModalProps> = ({ isOpen, onClose }) => {
               >
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
-                  width="20"
-                  height="20"
+                  width="18"
+                  height="18"
                   viewBox="0 0 24 24"
                   fill="none"
                   stroke="currentColor"
@@ -177,16 +178,16 @@ const AIChatModal: React.FC<AIChatModalProps> = ({ isOpen, onClose }) => {
               </button>
             </div>
 
-            <div className="h-[28rem] overflow-y-auto bg-gray-50 p-4">
+            <div className="h-[20rem] overflow-y-auto bg-gray-800 p-3 text-white">
               {messages.map((message, index) => (
-                <div key={index} className="mb-6">
-                  <div
+                <div key={index} className="mb-4">
+                <div
                     className={`mb-2 flex ${
-                      message.role === 'user' ? 'justify-end' : 'justify-start'
-                    }`}
-                  >
+                    message.role === 'user' ? 'justify-end' : 'justify-start'
+                  }`}
+                >
                     {message.role === 'assistant' && (
-                      <div className="mr-2 h-8 w-8 flex-shrink-0 overflow-hidden rounded-full bg-gradient-to-r from-[#7928CA] to-[#FF0080]">
+                      <div className="mr-2 h-6 w-6 flex-shrink-0 overflow-hidden rounded-full bg-gradient-to-r from-[#7928CA] to-[#FF0080]">
                         <svg
                           className="h-full w-full p-1 text-white"
                           viewBox="0 0 24 24"
@@ -200,13 +201,13 @@ const AIChatModal: React.FC<AIChatModalProps> = ({ isOpen, onClose }) => {
                         </svg>
                       </div>
                     )}
-                    <div
-                      className={`max-w-[85%] rounded-lg p-3 ${
-                        message.role === 'user'
+                  <div
+                      className={`max-w-[85%] rounded-lg p-2 text-sm ${
+                      message.role === 'user'
                           ? 'bg-gradient-to-r from-[#7928CA] to-[#FF0080] text-white'
-                          : 'bg-white text-gray-800 shadow'
-                      }`}
-                    >
+                        : 'bg-gray-700 text-gray-100'
+                    }`}
+                  >
                       {message.content.split('\n').map((line, i) => (
                         <React.Fragment key={i}>
                           {line}
@@ -215,9 +216,9 @@ const AIChatModal: React.FC<AIChatModalProps> = ({ isOpen, onClose }) => {
                       ))}
                     </div>
                     {message.role === 'user' && (
-                      <div className="ml-2 h-8 w-8 flex-shrink-0 overflow-hidden rounded-full bg-gradient-to-r from-[#7928CA] to-[#FF0080]">
+                      <div className="ml-2 h-6 w-6 flex-shrink-0 overflow-hidden rounded-full bg-gradient-to-r from-[#7928CA] to-[#FF0080]">
                         <svg
-                          className="h-full w-full p-1.5 text-white"
+                          className="h-full w-full p-1 text-white"
                           viewBox="0 0 24 24"
                           fill="none"
                           stroke="currentColor"
@@ -242,7 +243,7 @@ const AIChatModal: React.FC<AIChatModalProps> = ({ isOpen, onClose }) => {
 
                   {/* Product recommendations display */}
                   {message.products && message.products.length > 0 && (
-                    <div className="ml-10 mt-2 flex flex-wrap gap-3">
+                    <div className="ml-8 mt-2 flex flex-wrap gap-2">
                       {message.products.map((product, productIndex) => (
                         <Link
                           href={`/details?product=${encodeURIComponent(
@@ -250,8 +251,8 @@ const AIChatModal: React.FC<AIChatModalProps> = ({ isOpen, onClose }) => {
                           )}`}
                           key={productIndex}
                         >
-                          <div className="group relative w-56 cursor-pointer overflow-hidden rounded-lg bg-white shadow-md transition-all hover:-translate-y-1 hover:shadow-lg">
-                            <div className="relative h-48 w-full overflow-hidden">
+                          <div className="group relative w-44 cursor-pointer overflow-hidden rounded-lg bg-gray-700 shadow-md transition-all hover:-translate-y-1 hover:shadow-lg">
+                            <div className="relative h-36 w-full overflow-hidden">
                               <Image
                                 src={product.image}
                                 alt={product.name}
@@ -263,23 +264,23 @@ const AIChatModal: React.FC<AIChatModalProps> = ({ isOpen, onClose }) => {
                                 {product.discount}
                               </div>
                             </div>
-                            <div className="p-3">
-                              <h3 className="line-clamp-1 font-medium">
+                            <div className="p-2">
+                              <h3 className="line-clamp-1 text-sm font-medium text-white">
                                 {product.name}
                               </h3>
-                              <p className="line-clamp-2 text-xs text-gray-600">
+                              <p className="line-clamp-1 text-xs text-gray-300">
                                 {product.description}
                               </p>
-                              <div className="mt-2 flex items-center gap-2">
-                                <span className="font-bold text-[#FF0080]">
+                              <div className="mt-1 flex items-center gap-2">
+                                <span className="text-sm font-bold text-[#FF0080]">
                                   ₹{product.price}
                                 </span>
-                                <span className="text-xs text-gray-500 line-through">
+                                <span className="text-xs text-gray-400 line-through">
                                   ₹{product.originalPrice}
                                 </span>
                               </div>
-                              <div className="mt-2 text-xs font-medium text-[#7928CA]">
-                                Click to view details
+                              <div className="mt-1 text-xs font-medium text-[#7928CA]">
+                                View details
                               </div>
                             </div>
                           </div>
@@ -292,7 +293,7 @@ const AIChatModal: React.FC<AIChatModalProps> = ({ isOpen, onClose }) => {
 
               {isLoading && (
                 <div className="flex justify-start">
-                  <div className="mr-2 h-8 w-8 flex-shrink-0 overflow-hidden rounded-full bg-gradient-to-r from-[#7928CA] to-[#FF0080]">
+                  <div className="mr-2 h-6 w-6 flex-shrink-0 overflow-hidden rounded-full bg-gradient-to-r from-[#7928CA] to-[#FF0080]">
                     <svg
                       className="h-full w-full p-1 text-white"
                       viewBox="0 0 24 24"
@@ -305,7 +306,7 @@ const AIChatModal: React.FC<AIChatModalProps> = ({ isOpen, onClose }) => {
                       />
                     </svg>
                   </div>
-                  <div className="max-w-[80%] rounded-lg bg-white p-3 text-gray-800 shadow">
+                  <div className="max-w-[80%] rounded-lg bg-gray-700 p-2 text-gray-100">
                     <div className="flex space-x-2">
                       <div className="h-2 w-2 animate-bounce rounded-full bg-[#7928CA]"></div>
                       <div className="h-2 w-2 animate-bounce rounded-full bg-[#9C55D1] delay-100"></div>
@@ -317,51 +318,51 @@ const AIChatModal: React.FC<AIChatModalProps> = ({ isOpen, onClose }) => {
               <div ref={messagesEndRef} />
             </div>
 
-            <div className="border-t p-4">
+            <div className="border-t border-gray-700 bg-gray-900 p-3">
               <div className="flex gap-2">
                 <textarea
-                  className="flex-1 resize-none rounded-lg border border-gray-300 p-3 focus:border-[#7928CA] focus:outline-none focus:ring-2 focus:ring-[#7928CA]/20"
+                  className="flex-1 resize-none rounded-lg border border-gray-700 bg-gray-800 p-2 text-sm text-white placeholder-gray-400 focus:border-[#7928CA] focus:outline-none focus:ring-2 focus:ring-[#7928CA]/20"
                   placeholder="Ask about products, styles, or fashion advice..."
-                  rows={2}
+                  rows={1}
                   value={input}
                   onChange={(e) => setInput(e.target.value)}
                   onKeyDown={handleKeyDown}
                   disabled={isLoading}
                 />
                 <button
-                  className="flex-shrink-0 rounded-lg bg-gradient-to-r from-[#7928CA] to-[#FF0080] px-4 font-medium text-white transition-all hover:opacity-90 disabled:from-gray-400 disabled:to-gray-300"
+                  className="flex-shrink-0 rounded-lg bg-gradient-to-r from-[#7928CA] to-[#FF0080] px-3 text-sm font-medium text-white transition-all hover:opacity-90 disabled:from-gray-600 disabled:to-gray-500"
                   onClick={handleSendMessage}
                   disabled={isLoading || !input.trim()}
                 >
                   Send
                 </button>
               </div>
-              <div className="mt-3 flex items-center justify-between px-1">
+              <div className="mt-2 flex items-center justify-between px-1">
                 <button
                   onClick={() => setInput('What summer items are on sale?')}
-                  className="rounded-full bg-gray-100 px-3 py-1.5 text-xs text-gray-600 hover:bg-gray-200"
+                  className="rounded-full bg-gray-800 px-2 py-1 text-xs text-gray-300 hover:bg-gray-700"
                   disabled={isLoading}
                 >
-                  Summer sale items
+                  Summer sale
                 </button>
                 <button
                   onClick={() =>
                     setInput('Recommend outfit for office meeting')
                   }
-                  className="rounded-full bg-gray-100 px-3 py-1.5 text-xs text-gray-600 hover:bg-gray-200"
+                  className="rounded-full bg-gray-800 px-2 py-1 text-xs text-gray-300 hover:bg-gray-700"
                   disabled={isLoading}
                 >
-                  Office outfit ideas
+                  Office outfit
                 </button>
                 <button
                   onClick={() => setInput('What is your return policy?')}
-                  className="rounded-full bg-gray-100 px-3 py-1.5 text-xs text-gray-600 hover:bg-gray-200"
+                  className="rounded-full bg-gray-800 px-2 py-1 text-xs text-gray-300 hover:bg-gray-700"
                   disabled={isLoading}
                 >
-                  Return policy
+                  Returns
                 </button>
               </div>
-              <div className="mt-2 text-center text-xs text-gray-500">
+              <div className="mt-1 text-center text-xs text-gray-500">
                 Powered by Collie AI
               </div>
             </div>

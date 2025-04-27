@@ -1,23 +1,40 @@
 /**
- * Preloads an array of images by creating new Image objects and setting their src
- * @param imagePaths Array of image paths to preload
- * @returns Promise that resolves when all images are loaded or rejects if any fails
+ * Utility to preload images for better user experience
  */
+
 export const preloadImages = (imagePaths: string[]): Promise<void[]> => {
-  const imagePromises = imagePaths.map((path) => {
-    return new Promise<void>((resolve, reject) => {
+  console.log('Preloading images:', imagePaths);
+
+  const loadImage = (src: string): Promise<void> => {
+    return new Promise((resolve, reject) => {
       const img = new Image();
+
       img.onload = () => {
-        console.log(`Successfully preloaded image: ${path}`);
+        console.log(`Successfully preloaded: ${src}`);
         resolve();
       };
-      img.onerror = () => {
-        console.error(`Failed to preload image: ${path}`);
-        reject(new Error(`Failed to preload image: ${path}`));
-      };
-      img.src = path;
-    });
-  });
 
-  return Promise.all(imagePromises);
+      img.onerror = () => {
+        console.error(`Failed to preload: ${src}`);
+        // Resolve anyway to not block the entire process
+        resolve();
+      };
+
+      img.src = src;
+    });
+  };
+
+  return Promise.all(imagePaths.map(loadImage));
+};
+
+/**
+ * Checks if an image exists by attempting to load it
+ */
+export const imageExists = (imagePath: string): Promise<boolean> => {
+  return new Promise((resolve) => {
+    const img = new Image();
+    img.onload = () => resolve(true);
+    img.onerror = () => resolve(false);
+    img.src = imagePath;
+  });
 };

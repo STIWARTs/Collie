@@ -123,7 +123,7 @@ function DiscoverBannerDeal(props: IProps) {
                       alt=""
                     />
                   </div>
-                  <div className="mt-2.5 w-full truncate text-left text-[14px] font-[500] tracking-wide">
+                  <div className="mt-2.5 w-full truncate text-left text-size-14 font-[500] tracking-wide">
                     {value.Heading}
                   </div>
                   <h6 className="mt-1 line-clamp-2 w-full text-left text-[13px] font-normal leading-[18px] opacity-[0.75]">

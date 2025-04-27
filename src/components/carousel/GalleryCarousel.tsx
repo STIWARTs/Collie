@@ -5,7 +5,7 @@ import {
   GalleryCarouselDesktopProps,
   GalleryCarouselMobileProps,
 } from './GalleryCarousel/GalleryCarousel.MultiScreen';
-import { DeviceHook } from 'hooks/global/Hooks.Device';
+import { useScreenDimensions } from '../../hooks/useScreenDimensions';
 
 const GalleryCarouselMobile = dynamic<GalleryCarouselMobileProps>(
   () =>
@@ -31,7 +31,7 @@ function GalleryCarousel(props: IProps) {
   const ContainerRef = useRef<HTMLDivElement>(null);
   const [CarouselState, setCarouselState] = useState(0);
   const [BannerTextTransition, setBannerTextTransition] = useState('open');
-  const { isMobile } = DeviceHook();
+  const { isMobile } = useScreenDimensions();
   const [isClient, setIsClient] = useState(false);
 
   // Make sure the component is mounted before rendering anything that depends on client-side features

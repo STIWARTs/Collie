@@ -1,7 +1,7 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { Button, TextField, Box, Divider, Typography } from '@mui/material';
+import { Button, TextField, Box, Divider, Typography, Alert } from '@mui/material';
 import { useRouter } from 'next/navigation';
 import Image from 'next/image';
 import HomeAndGalleryChildLayout from 'components/layout/HomeAndGallery/HomeAndGallery.ChildLayout';
@@ -10,8 +10,10 @@ import {
   ArrowLeftIcon,
   CreditCardIcon,
   TrashIcon,
+  ExclamationCircleIcon,
 } from '@heroicons/react/24/outline';
 import { useToast } from 'context/ToastContext';
+import { useWallet } from 'context/WalletContext';
 
 type CartItem = {
   Heading: string;
@@ -23,8 +25,11 @@ type CartItem = {
 export default function CheckoutPage() {
   const router = useRouter();
   const { showToast } = useToast();
+  const { balance, withdrawFunds } = useWallet();
   const [cartItems, setCartItems] = useState<CartItem[]>([]);
   const [total, setTotal] = useState('0.00');
+  const [paymentMethod, setPaymentMethod] = useState('delivery');
+  const [insufficientFunds, setInsufficientFunds] = useState(false);
   const [formData, setFormData] = useState({
     name: '',
     email: '',
@@ -33,6 +38,15 @@ export default function CheckoutPage() {
     pincode: '',
     phone: '',
   });
+
+  // Calculate final amount
+  const calculateFinalAmount = () => {
+    return (
+      parseFloat(total) +
+      99 +
+      parseFloat(total) * 0.18
+    );
+  };
 
   // Load cart items from localStorage
   useEffect(() => {
@@ -61,6 +75,16 @@ export default function CheckoutPage() {
       }
     }
   }, []);
+
+  // Check if wallet has sufficient funds
+  useEffect(() => {
+    const finalAmount = calculateFinalAmount();
+    if (paymentMethod === 'wallet' && finalAmount > balance) {
+      setInsufficientFunds(true);
+    } else {
+      setInsufficientFunds(false);
+    }
+  }, [paymentMethod, total, balance]);
 
   const handleRemoveItem = (index: number) => {
     const newCartItems = [...cartItems];
@@ -93,6 +117,10 @@ export default function CheckoutPage() {
     }));
   };
 
+  const handlePaymentMethodChange = (method: string) => {
+    setPaymentMethod(method);
+  };
+
   const handlePlaceOrder = () => {
     // Validate form
     const { name, email, address, city, pincode, phone } = formData;
@@ -105,20 +133,64 @@ export default function CheckoutPage() {
       return;
     }
 
-    // Process order
-    showToast(
-      'Success',
-      'Order Placed Successfully',
-      'Thank you for shopping with us!',
-    );
+    // Calculate final amount
+    const finalAmount = calculateFinalAmount();
 
-    // Clear cart
-    localStorage.setItem('cartItems', JSON.stringify([]));
+    // Process order based on payment method
+    if (paymentMethod === 'wallet') {
+      // Check if wallet has sufficient funds
+      if (finalAmount > balance) {
+        showToast(
+          'Error',
+          'Insufficient Funds',
+          `Your wallet balance (₹${balance.toFixed(2)}) is less than the order total (₹${finalAmount.toFixed(2)}).`,
+        );
+        return;
+      }
 
-    // Redirect to home page after a brief delay
-    setTimeout(() => {
-      router.push('/');
-    }, 1500);
+      // Actually withdraw funds from wallet
+      const success = withdrawFunds(finalAmount);
+      
+      if (success) {
+        // Generate order description with item names
+        const orderDescription = cartItems.map(item => item.Heading).join(', ');
+        
+        showToast(
+          'Success',
+          'Payment Successful',
+          `₹${finalAmount.toFixed(2)} has been deducted from your wallet for: ${orderDescription}`,
+        );
+        
+        // Clear cart
+        localStorage.setItem('cartItems', JSON.stringify([]));
+        
+        // Redirect to home page after a brief delay
+        setTimeout(() => {
+          router.push('/wallet'); // Redirect to wallet page to see transaction
+        }, 1500);
+      } else {
+        showToast(
+          'Error',
+          'Payment Failed',
+          'Unable to process payment. Please try again.',
+        );
+      }
+    } else {
+      // Pay on delivery
+      showToast(
+        'Success',
+        'Order Placed Successfully',
+        'Your order has been placed for cash on delivery.',
+      );
+      
+      // Clear cart
+      localStorage.setItem('cartItems', JSON.stringify([]));
+      
+      // Redirect to home page after a brief delay
+      setTimeout(() => {
+        router.push('/');
+      }, 1500);
+    }
   };
 
   return (
@@ -230,12 +302,7 @@ export default function CheckoutPage() {
                     <div className="flex justify-between">
                       <p className="text-lg font-bold text-white">Total</p>
                       <p className="text-lg font-bold text-white">
-                        ₹
-                        {(
-                          parseFloat(total) +
-                          99 +
-                          parseFloat(total) * 0.18
-                        ).toFixed(2)}
+                        ₹{calculateFinalAmount().toFixed(2)}
                       </p>
                     </div>
                   </>
@@ -404,8 +471,26 @@ export default function CheckoutPage() {
                 <h2 className="mb-4 mt-8 text-xl font-semibold text-white">
                   Payment Method
                 </h2>
-                <div className="rounded-md border border-gray-700 p-4">
+                
+                {/* Pay on Delivery Option */}
+                <div 
+                  className={`mb-3 cursor-pointer rounded-md border ${
+                    paymentMethod === 'delivery' 
+                      ? 'border-green-500 bg-green-500/10' 
+                      : 'border-gray-700'
+                  } p-4 transition-all duration-200`}
+                  onClick={() => handlePaymentMethodChange('delivery')}
+                >
                   <div className="flex items-center space-x-3">
+                    <div className={`flex h-5 w-5 items-center justify-center rounded-full border ${
+                      paymentMethod === 'delivery' 
+                        ? 'border-green-500' 
+                        : 'border-gray-500'
+                    }`}>
+                      {paymentMethod === 'delivery' && (
+                        <div className="h-3 w-3 rounded-full bg-green-500"></div>
+                      )}
+                    </div>
                     <CreditCardIcon className="h-6 w-6 text-gray-400" />
                     <div>
                       <p className="text-white">Pay on Delivery</p>
@@ -415,6 +500,66 @@ export default function CheckoutPage() {
                     </div>
                   </div>
                 </div>
+                
+                {/* Pay from Wallet Option */}
+                <div 
+                  className={`cursor-pointer rounded-md border ${
+                    paymentMethod === 'wallet' 
+                      ? 'border-green-500 bg-green-500/10' 
+                      : 'border-gray-700'
+                  } p-4 transition-all duration-200`}
+                  onClick={() => handlePaymentMethodChange('wallet')}
+                >
+                  <div className="flex items-center space-x-3">
+                    <div className={`flex h-5 w-5 items-center justify-center rounded-full border ${
+                      paymentMethod === 'wallet' 
+                        ? 'border-green-500' 
+                        : 'border-gray-500'
+                    }`}>
+                      {paymentMethod === 'wallet' && (
+                        <div className="h-3 w-3 rounded-full bg-green-500"></div>
+                      )}
+                    </div>
+                    <svg 
+                      className="h-6 w-6 text-gray-400" 
+                      fill="none" 
+                      stroke="currentColor" 
+                      viewBox="0 0 24 24" 
+                      xmlns="http://www.w3.org/2000/svg"
+                    >
+                      <path 
+                        strokeLinecap="round" 
+                        strokeLinejoin="round" 
+                        strokeWidth={2} 
+                        d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z" 
+                      />
+                    </svg>
+                    <div>
+                      <p className="text-white">Pay from Wallet</p>
+                      <p className="text-sm text-gray-400">
+                        Use your wallet balance to pay for this order
+                      </p>
+                      <div className={`mt-1 text-sm font-semibold ${insufficientFunds ? 'text-red-500' : 'text-green-500'}`}>
+                        Available Balance: ₹{balance.toFixed(2)}
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Show insufficient funds warning */}
+                {insufficientFunds && paymentMethod === 'wallet' && (
+                  <div className="mt-3">
+                    <Alert 
+                      severity="error"
+                      icon={<ExclamationCircleIcon className="h-5 w-5 text-red-500" />}
+                      className="bg-red-500/10 border border-red-500/30 text-white"
+                    >
+                      <div className="text-sm font-medium">
+                        Insufficient funds in wallet. Please add funds or choose a different payment method.
+                      </div>
+                    </Alert>
+                  </div>
+                )}
 
                 <Button
                   fullWidth
@@ -442,10 +587,23 @@ export default function CheckoutPage() {
                     },
                   }}
                   onClick={handlePlaceOrder}
-                  disabled={cartItems.length === 0}
+                  disabled={cartItems.length === 0 || (paymentMethod === 'wallet' && insufficientFunds)}
                 >
-                  Place Order
+                  {paymentMethod === 'wallet' ? 'Pay ₹' + calculateFinalAmount().toFixed(2) + ' from Wallet' : 'Place Order'}
                 </Button>
+
+                {/* Add Funds Button (only show when wallet selected and insufficient funds) */}
+                {paymentMethod === 'wallet' && insufficientFunds && (
+                  <Button
+                    fullWidth
+                    variant="outlined"
+                    className="mt-3 border-blue-500 py-3 text-sm font-semibold text-blue-500 hover:bg-blue-500/10"
+                    onClick={() => router.push('/wallet')}
+                    sx={{ textTransform: 'none' }}
+                  >
+                    Add Funds to Wallet
+                  </Button>
+                )}
               </div>
             </div>
           </div>

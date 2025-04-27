@@ -37,7 +37,7 @@ function SignInNextButton(props: IProps) {
         initial="open"
         animate={Animate}
         variants={Variants}
-        className="truncate text-[14px] font-medium text-sky-400 opacity-100 group-hover:opacity-75"
+        className="text-size-14 truncate font-medium text-sky-400 opacity-100 group-hover:opacity-75"
       >
         {props.Label}
       </m.label>

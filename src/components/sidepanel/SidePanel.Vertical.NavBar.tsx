@@ -1,6 +1,6 @@
 import { motion } from 'framer-motion';
 import Image from 'next/image';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 
 interface IProps {
   Active: string;
@@ -24,6 +24,23 @@ function SidePanelVerticalNavBar(props: IProps) {
   const [Number, setNumber] = useState(0);
   const [Height, setHeight] = useState(0);
   const [MarginTop, setMarginTop] = useState(0);
+  const [isMobile, setIsMobile] = useState(false);
+
+  // Check if we're on mobile
+  useEffect(() => {
+    const checkIfMobile = () => {
+      setIsMobile(window.innerWidth <= 768);
+    };
+
+    // Initial check
+    checkIfMobile();
+
+    // Add resize listener
+    window.addEventListener('resize', checkIfMobile);
+
+    // Clean up
+    return () => window.removeEventListener('resize', checkIfMobile);
+  }, []);
 
   const variants = {
     initial: { height: Height, marginTop: 0 },
@@ -92,7 +109,11 @@ function SidePanelVerticalNavBar(props: IProps) {
   };
 
   return (
-    <div className="mx-2 w-full rounded-xl bg-[#181818] py-5 pr-5">
+    <div
+      className={`mx-2 w-full rounded-xl bg-[#181818] py-5 pr-5 ${
+        isMobile ? 'sidepanel-mobile' : ''
+      }`}
+    >
       <div id="sidepanel-vertical-navbar-container-div" className="flex w-full">
         <motion.div
           animate="animate"
@@ -107,7 +128,9 @@ function SidePanelVerticalNavBar(props: IProps) {
             <motion.button
               key={idx}
               id={`sidepanel-vertical-navbar-button-id-${idx}`}
-              className="group ml-5 flex w-full cursor-pointer space-x-4"
+              className={`group ml-5 flex w-full cursor-pointer ${
+                isMobile ? 'space-x-2' : 'space-x-4'
+              }`}
               onClick={() => {
                 onClick(idx);
                 props.setActive(value.Name);
@@ -115,8 +138,8 @@ function SidePanelVerticalNavBar(props: IProps) {
               whileTap={{ scale: 0.95 }}
             >
               <Image
-                height={20}
-                width={20}
+                height={isMobile ? 16 : 20}
+                width={isMobile ? 16 : 20}
                 className={`${
                   props.Active == value.Name
                     ? 'opacity-100'
@@ -132,7 +155,7 @@ function SidePanelVerticalNavBar(props: IProps) {
                   props.Active == value.Name
                     ? 'opacity-100'
                     : 'opacity-60 group-hover:opacity-100 group-hover:transition-opacity'
-                } trunacate text-[14px] font-[600] tracking-wide text-white`}
+                } trunacate text-size-14 font-[600] tracking-wide text-white`}
               >
                 {value.Name}
               </p>
@@ -141,10 +164,18 @@ function SidePanelVerticalNavBar(props: IProps) {
         </div>
       </div>
       {props.Active === 'Home' && (
-        <div className="absolute left-[11px] top-[75px] h-[55px] w-[97%] rounded-lg bg-white opacity-[0.04]" />
+        <div
+          className={`absolute left-[11px] top-[75px] h-[55px] ${
+            isMobile ? 'w-[95%]' : 'w-[97%]'
+          } rounded-lg bg-white opacity-[0.04]`}
+        />
       )}
       {props.Active === 'Gallery' && (
-        <div className="absolute left-[11px] top-[135px] h-[55px] w-[97%] rounded-lg bg-white opacity-[0.04]" />
+        <div
+          className={`absolute left-[11px] top-[135px] h-[55px] ${
+            isMobile ? 'w-[95%]' : 'w-[97%]'
+          } rounded-lg bg-white opacity-[0.04]`}
+        />
       )}
     </div>
   );

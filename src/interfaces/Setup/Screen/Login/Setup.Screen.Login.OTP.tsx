@@ -170,10 +170,10 @@ function SetupLoginOTPScreen(props: SetupLoginOTPScreenProps) {
         className={`${props.ContentClassName} flex w-full flex-col space-y-4`}
       >
         <div className="flex items-center space-x-1 pb-1.5">
-          <p className="text-[14px] font-normal tracking-wide text-white/75">
+          <p className="text-size-14 font-normal tracking-wide text-white/75">
             Verification code sent to
           </p>
-          <p className="text-[14px] font-[500] tracking-wide text-white">
+          <p className="text-size-14 font-[500] tracking-wide text-white">
             {PhoneNumber}
           </p>
         </div>

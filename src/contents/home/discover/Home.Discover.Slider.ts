@@ -99,7 +99,7 @@ export const SummerSaleContent = [
     Discount: '-60%',
     OriginalPrice: '1899.00',
     DiscountedPrice: '759.00',
-    Image: '/images/avatar/illustration/2.png',
+    Image: '/images/avatar/illustration/3.png',
   },
   {
     Heading: 'Tropical Print Swim Shorts',
@@ -107,7 +107,7 @@ export const SummerSaleContent = [
     Discount: '-50%',
     OriginalPrice: '1299.00',
     DiscountedPrice: '649.00',
-    Image: '/images/avatar/illustration/3.png',
+    Image: '/images/avatar/illustration/6.png',
   },
   {
     Heading: 'Straw Beach Hat',
@@ -123,7 +123,7 @@ export const SummerSaleContent = [
     Discount: '-70%',
     OriginalPrice: '1499.00',
     DiscountedPrice: '449.00',
-    Image: '/images/avatar/illustration/1.png',
+    Image: '/images/avatar/illustration/8.png',
   },
   {
     Heading: 'Cotton Sundress',
@@ -132,7 +132,7 @@ export const SummerSaleContent = [
     Discount: '-65%',
     OriginalPrice: '2199.00',
     DiscountedPrice: '769.00',
-    Image: '/images/avatar/illustration/6.png',
+    Image: '/images/avatar/illustration/9.png',
   },
   {
     Heading: 'Slide Sandals - Premium',
@@ -140,7 +140,7 @@ export const SummerSaleContent = [
     Discount: '-55%',
     OriginalPrice: '1299.00',
     DiscountedPrice: '584.00',
-    Image: '/images/avatar/illustration/4.png',
+    Image: '/images/avatar/illustration/gsgs.png',
   },
   {
     Heading: 'Oversized Beach Tote',
@@ -149,7 +149,7 @@ export const SummerSaleContent = [
     Discount: '-50%',
     OriginalPrice: '1799.00',
     DiscountedPrice: '899.00',
-    Image: '/images/avatar/illustration/8.png',
+    Image: '/images/avatar/illustration/vzsf.png',
   },
   {
     Heading: 'UV Protection Rashguard',
@@ -158,7 +158,7 @@ export const SummerSaleContent = [
     Discount: '-60%',
     OriginalPrice: '1999.00',
     DiscountedPrice: '799.00',
-    Image: '/images/avatar/illustration/5.png',
+    Image: '/images/avatar/illustration/fasfaf.png',
   },
   {
     Heading: 'Summer Perfume Collection',
@@ -166,7 +166,7 @@ export const SummerSaleContent = [
     Discount: '-40%',
     OriginalPrice: '3499.00',
     DiscountedPrice: '2099.00',
-    Image: '/images/avatar/illustration/9.png',
+    Image: '/images/avatar/illustration/zzgzadaffsffds.png',
   },
   {
     Heading: 'Polarized Aviator Sunglasses',
@@ -175,6 +175,6 @@ export const SummerSaleContent = [
     Discount: '-75%',
     OriginalPrice: '2499.00',
     DiscountedPrice: '624.00',
-    Image: '/images/avatar/illustration/10.png',
+    Image: '/images/avatar/illustration/ssaaaa.png',
   },
 ];

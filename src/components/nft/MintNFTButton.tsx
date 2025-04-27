@@ -1,120 +1,130 @@
 'use client';
 
-import React, { useState, useEffect } from 'react';
-import {
-  useAccount,
-  useWriteContract,
-  useWaitForTransactionReceipt,
-  useReadContract,
-} from 'wagmi';
-import { parseEther } from 'viem';
-import {
-  DIGITAL_FASHION_NFT_ADDRESS,
-  DIGITAL_FASHION_NFT_ABI,
-} from '../../contracts/DigitalFashionNFT';
-import { ConnectWalletButton } from '../wallet/ConnectWalletButton';
-import dynamic from 'next/dynamic';
+import React, { useState } from 'react';
+import { Button } from '@mui/material';
+import Image from 'next/image';
+// Import the default export from ConnectWalletButton
+import ConnectWalletButton from '../wallet/ConnectWalletButton';
 
 interface MintNFTButtonProps {
-  productName: string;
-  productImage: string | null;
-  productDescription: string;
-  price: string;
+  productName?: string;
+  productImage?: string | null;
+  productDescription?: string;
+  price?: string;
   className?: string;
 }
 
-// Create the client-only component
-const ClientOnlyMintNFTButton: React.FC<MintNFTButtonProps> = ({
-  productName,
-  productImage,
-  productDescription,
-  price,
+export default function MintNFTButton({
+  productName = 'Product',
+  productImage = null,
+  productDescription = 'Digital collectible',
+  price = '0.01',
   className = '',
-}) => {
-  const [isMinted, setIsMinted] = useState(false);
-  const [tokenId, setTokenId] = useState<number | null>(null);
+}: MintNFTButtonProps) {
+  const [isMinting, setIsMinting] = useState(false);
+  const [isSuccess, setIsSuccess] = useState(false);
+  const [error, setError] = useState<string | null>(null);
 
-  // For writing to the contract (minting)
-  const { data: hash, isPending, error, writeContract } = useWriteContract();
-
-  // Get wallet connection status
-  const { address, isConnected } = useAccount();
-
-  // For waiting for transaction confirmation
-  const { isLoading: isConfirming, isSuccess: isConfirmed } =
-    useWaitForTransactionReceipt({ hash });
+  // Mock connected state - in a real app this would come from useAccount hook
+  const isConnected = false;
 
   const handleMint = async () => {
-    if (!isConnected || !address) return;
-
-    // In a real app, this would be uploaded to IPFS
-    const metadata = {
-      name: productName,
-      description: productDescription,
-      image: productImage,
-    };
+    if (!isConnected) {
+      setError('Please connect your wallet first');
+      return;
+    }
 
     try {
-      // In a real implementation, this would be a call to upload to IPFS first
-      const metadataURI = `ipfs://mock-uri/${productName
-        .replace(/\s+/g, '-')
-        .toLowerCase()}`;
+      setIsMinting(true);
+      setError(null);
 
-      await writeContract({
-        address: DIGITAL_FASHION_NFT_ADDRESS,
-        abi: DIGITAL_FASHION_NFT_ABI,
-        functionName: 'mint',
-        args: [address, metadataURI],
-        value: parseEther(price),
-      });
-    } catch (err) {
+      // Mock API call to mint NFT
+      await new Promise((resolve) => setTimeout(resolve, 2000));
+
+      // Success!
+      setIsSuccess(true);
+
+      // Reset success state after 3 seconds
+      setTimeout(() => {
+        setIsSuccess(false);
+      }, 3000);
+    } catch (err: any) {
       console.error('Error minting NFT:', err);
+      setError(err.message || 'Failed to mint NFT');
+    } finally {
+      setIsMinting(false);
     }
   };
 
-  // Set isMinted and tokenId when transaction is confirmed
-  useEffect(() => {
-    if (isConfirmed) {
-      setIsMinted(true);
-      // In a real app, you would get the actual tokenId from the transaction receipt
-      setTokenId(Math.floor(Math.random() * 1000));
-    }
-  }, [isConfirmed]);
-
-  if (!isConnected) {
-    return <ConnectWalletButton className={className} />;
-  }
-
-  if (isMinted && tokenId !== null) {
-    return (
-      <button
-        className={`rounded-lg bg-green-500 px-6 py-2 text-[13px] font-[500] tracking-[0.075em] text-white ${className}`}
-        disabled
-      >
-        Minted on Base! (Token #{tokenId})
-      </button>
-    );
-  }
-
   return (
-    <button
-      onClick={handleMint}
-      disabled={isPending || isConfirming}
-      className={`rounded-lg bg-[#00A3FF] px-6 py-2 text-[13px] font-[500] tracking-[0.075em] text-white transition-all hover:bg-[#0089D6] ${className}`}
-    >
-      {isPending || isConfirming ? 'Minting...' : 'Mint on Base'}
-    </button>
-  );
-};
-
-// Use dynamic import with ssr: false to prevent hydration errors
-const MintNFTButton = dynamic(() => Promise.resolve(ClientOnlyMintNFTButton), {
-  ssr: false,
-  loading: () => (
-    <div className="rounded-lg bg-[#00A3FF] px-6 py-2 text-[13px] font-[500] tracking-[0.075em] text-white opacity-70">
-      Loading...
+    <div className={`flex flex-col ${className}`}>
+      {!isConnected ? (
+        <ConnectWalletButton />
+      ) : (
+        <Button
+          onClick={handleMint}
+          disabled={isMinting}
+          className={`group flex items-center justify-center space-x-2 rounded-md bg-gradient-to-br from-purple-500 to-blue-500 px-4 py-2.5 font-medium text-white transition-all hover:from-purple-600 hover:to-blue-600 disabled:opacity-70 ${
+            isMinting ? 'cursor-not-allowed' : ''
+          }`}
+        >
+          {isMinting ? (
+            <>
+              <svg
+                className="mr-2 h-5 w-5 animate-spin text-white"
+                xmlns="http://www.w3.org/2000/svg"
+                fill="none"
+                viewBox="0 0 24 24"
+              >
+                <circle
+                  className="opacity-25"
+                  cx="12"
+                  cy="12"
+                  r="10"
+                  stroke="currentColor"
+                  strokeWidth="4"
+                ></circle>
+                <path
+                  className="opacity-75"
+                  fill="currentColor"
+                  d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
+                ></path>
+              </svg>
+              <span>Minting...</span>
+            </>
+          ) : isSuccess ? (
+            <>
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                className="h-5 w-5 text-green-300"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={2}
+                  d="M5 13l4 4L19 7"
+                />
+              </svg>
+              <span>Minted!</span>
+            </>
+          ) : (
+            <>
+              <Image
+                src="/icons/nft-icon.svg"
+                width={20}
+                height={20}
+                alt="NFT"
+                className="group-hover:animate-pulse"
+              />
+              <span>Mint NFT</span>
+            </>
+          )}
+        </Button>
+      )}
+      {error && <p className="mt-2 text-sm text-red-400">{error}</p>}
     </div>
-  ),
-});
-
-export { MintNFTButton };
+  );
+}

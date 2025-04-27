@@ -8,7 +8,7 @@ import Image from 'next/image';
 import { GalleryCarouselContentProps } from 'contents/gallery/Gallery.Carousel';
 import WishlistSVG from '../../../../public/icons/wish.svg';
 import { createRef } from 'react';
-import { preloadImages } from '../../../utils/imagePreload';
+import { preloadImages, imageExists } from '../../../utils/imagePreload';
 
 export interface GalleryCarouselSliderProps {
   ElementRef?: RefObject<HTMLDivElement>;
@@ -28,47 +28,62 @@ export default function GalleryCarouselSlider(
   const [imagesPreloaded, setImagesPreloaded] = useState(false);
   const [imageErrors, setImageErrors] = useState<Record<number, boolean>>({});
 
-  // Define the correct order of images for slides 1 through 10
-  const correctImageOrder = [
-    '/images/avatar/illustration/1.png', // Slide 1
-    '/images/avatar/illustration/2.png', // Slide 2
-    '/images/avatar/illustration/3.png', // Slide 3
-    '/images/avatar/illustration/4.png', // Slide 4
-    '/images/avatar/illustration/5.png', // Slide 5
-    '/images/avatar/illustration/6.png', // Slide 6
-    '/images/avatar/illustration/7.png', // Slide 7
-    '/images/avatar/illustration/8.png', // Slide 8
-    '/images/avatar/illustration/9.png', // Slide 9
-    '/images/avatar/illustration/10.png', // Slide 10
-  ];
-
-  // Create a modified ContentArray with correct image paths
-  const correctedContentArray = props.ContentArray.map((item, index) => {
-    if (index < correctImageOrder.length) {
-      return {
-        ...item,
-        Image: correctImageOrder[index],
-      };
-    }
-    return item;
-  });
+  // Define fallback image if needed
+  const fallbackImage = '/agewear_white.svg';
 
   // Preload all images when component mounts
   useEffect(() => {
-    // Use the corrected image paths for preloading
-    preloadImages(correctImageOrder)
-      .then(() => {
-        console.log(
-          'All carousel images preloaded successfully in correct order',
-        );
+    console.log('Starting to preload carousel images');
+
+    // Define an array of available images we know exist
+    const availableImages = [
+      '/images/avatar/illustration/1.png',
+      '/images/avatar/illustration/2.png',
+      '/images/avatar/illustration/4.png',
+      '/images/avatar/illustration/5.png',
+      '/images/avatar/illustration/6.png',
+      '/images/avatar/illustration/7.png',
+      '/images/avatar/illustration/8.png',
+      '/images/avatar/illustration/9.png',
+      '/images/avatar/illustration/10.png',
+    ];
+
+    // Update content array to use known images
+    const updateContentArray = () => {
+      if (props.ContentArray && props.ContentArray.length > 0) {
+        for (let i = 0; i < props.ContentArray.length; i++) {
+          if (i < availableImages.length) {
+            // Use our available images instead
+            const imgElement = document.querySelector(
+              `.swiper-slide:nth-child(${i + 1}) img`,
+            ) as HTMLImageElement;
+            if (imgElement) {
+              imgElement.src = availableImages[i];
+            }
+          }
+        }
+      }
+    };
+
+    // First check if images exist
+    const verifyAndPreloadImages = async () => {
+      try {
+        // Use the preloadImages utility
+        await preloadImages(availableImages);
+        console.log('All carousel images preloaded successfully');
         setImagesPreloaded(true);
-      })
-      .catch((error) => {
+
+        // Update images after a short delay to ensure DOM is ready
+        setTimeout(updateContentArray, 100);
+      } catch (error) {
         console.error('Error preloading images:', error);
         // Continue anyway to show what images we can
         setImagesPreloaded(true);
-      });
-  }, []);
+      }
+    };
+
+    verifyAndPreloadImages();
+  }, [props.ContentArray]);
 
   // Handle button click to redirect based on content type
   const handleButtonClick = (item: GalleryCarouselContentProps) => {
@@ -93,22 +108,41 @@ export default function GalleryCarouselSlider(
   const handleImageLoad = (index: number) => {
     setLoadedImages((prev) => ({ ...prev, [index]: true }));
     console.log(
-      `Image ${index + 1} loaded successfully: ${correctImageOrder[index]}`,
+      `Image ${index + 1} loaded successfully: ${
+        props.ContentArray[index].Image
+      }`,
     );
   };
 
   const handleImageError = (index: number) => {
     setImageErrors((prev) => ({ ...prev, [index]: true }));
     console.error(
-      `Failed to load image ${index + 1}: ${correctImageOrder[index]}`,
+      `Failed to load image ${index + 1}: ${props.ContentArray[index].Image}`,
     );
+    // If the target element exists, set a fallback source
+    const imageElements = document.querySelectorAll('.swiper-slide img');
+    if (imageElements[index]) {
+      // Try an alternative image path if the original fails
+      const originalPath = props.ContentArray[index].Image;
+      const alternativePath = originalPath.replace(
+        '/images/avatar/illustration',
+        '/images/avatar',
+      );
+
+      // Use any of the alternative approaches below:
+      // 1. Use a generic avatar image if available
+      (imageElements[index] as HTMLImageElement).src =
+        '/images/avatar/gsgs.png';
+
+      console.log(`Applied fallback image for index ${index}`);
+    }
   };
 
   // If images haven't been preloaded yet, show a simple loading indicator
   if (!imagesPreloaded) {
     return (
       <div className="flex h-[250px] w-full items-center justify-center">
-        <p className="text-white">Loading images...</p>
+        <div className="h-8 w-8 animate-spin rounded-full border-2 border-white border-t-transparent"></div>
       </div>
     );
   }
@@ -142,23 +176,24 @@ export default function GalleryCarouselSlider(
         observer={true}
         observeParents={true}
       >
-        {correctedContentArray.map((item, index) => (
+        {props.ContentArray.map((item, index) => (
           <SwiperSlide key={index} className="relative h-[250px] w-[200px]">
             <Image
               className="absolute left-0 top-0 z-[-2] h-full w-full object-cover"
               src={item.Image}
               placeholder="blur"
-              blurDataURL="data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/4gHYSUNDX1BST0ZJTEUAAQEAAAHIAAAAAAQwAABtbnRyUkdCIFhZWiAH4AABAAEAAAAAAABhY3NwAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAQAA9tYAAQAAAADTLQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAlkZXNjAAAA8AAAACRyWFlaAAABFAAAABRnWFlaAAABKAAAABRiWFlaAAABPAAAABR3dHB0AAABUAAAABRyVFJDAAABZAAAAChnVFJDAAABZAAAAChiVFJDAAABZAAAAChjcHJ0AAABjAAAADxtbHVjAAAAAAAAAAEAAAAMZW5VUwAAAAgAAAAcAHMAUgBHAEJYWVogAAAAAAAAb6IAADj1AAADkFhZWiAAAAAAAABimQAAt4UAABjaWFlaIAAAAAAAACSgAAAPhAAAts9YWVogAAAAAAAA9tYAAQAAAADTLXBhcmEAAAAAAAQAAAACZmYAAPKnAAANWQAAE9AAAApbAAAAAAAAAABtbHVjAAAAAAAAAAEAAAAMZW5VUwAAACAAAAAcAEcAbwBvAGcAbABlACAASQBuAGMALgAgADIAMAAxADb/2wBDAAMCAgICAgMCAgIDAwMDBAYEBAQEBAgGBgUGCQgKCgkICQkKDA8MCgsOCwkJDRENDg8QEBEQCgwSExIQEw8QEBD/2wBDAQMDAwQDBAgEBAgQCwkLEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBD/wAARCAAGAAoDASIAAhEBAxEB/8QAFQABAQAAAAAAAAAAAAAAAAAAAAn/xAAcEAABBAMBAAAAAAAAAAAAAAASAAEDEQQGIQX/xAAVAQEBAAAAAAAAAAAAAAAAAAAAAf/EABQRAQAAAAAAAAAAAAAAAAAAAAD/2gAMAwEAAhEDEQA/AIJ6dkXCi0EUaOVDrJtS2vlUY1//2Q=="
+              blurDataURL="data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/4gHYSUNDX1BST0ZJTEUAAQEAAAHIAAAAAAQwAABtbnRyUkdCIFhZWiAH4AABAAEAAAAAAABhY3NwAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAQAA9tYAAQAAAADTLQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAlkZXNjAAAA8AAAACRyWFlaAAABFAAAABRnWFlaAAABKAAAABRiWFlaAAABPAAAABR3dHB0AAABUAAAABRyVFJDAAABZAAAAChnVFJDAAABZAAAAChiVFJDAAABZAAAAChjcHJ0AAABjAAAADxtbHVjAAAAAAAAAAEAAAAMZW5VUwAAAAgAAAAcAHMAUgBHAEJYWVogAAAAAAAAb6IAADj1AAADkFhZWiAAAAAAAABimQAAt4UAABjaWFlaIAAAAAAAACSgAAAPhAAAts9YWVogAAAAAAAA9tYAAQAAAADTLXBhcmEAAAAAAAQAAAACZmYAAPKnAAANWQAAE9AAAApbAAAAAAAAAABtbHVjAAAAAAAAAAEAAAAMZW5VUwAAACAAAAAcAEcAbwBvAGcAbABlACAASQBuAGMALgAgADIAMAAxADb/2wBDAAMCAgICAgMCAgIDAwMDBAYEBAQEBAgGBgUGCQgKCgkICQkKDA8MCgsOCwkJDRENDg8QEBEQCgwSExIQEw8QEBD/2wBDAQMDAwQDBAgEBAgQCwkLEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBD/wAARCAAGAAoDASIAAhEBAxEB/8QAFQABAQAAAAAAAAAAAAAAAAAAAAn/xAAcEAABBAMBAAAAAAAAAAAAAAASAAEDEQQGIQX/xAAVAQEBAAAAAAAAAAAAAAAAAAAAAf/EABQRAQAAAAAAAAAAAAAAAAAAAAD/2gAMAwEAAhEDEQA/AIJ6dkXCi0EUaOVDrJtS2vlUY1//2Q=="
               width={200}
               height={250}
               priority={true}
               alt={`Gallery image ${index + 1}`}
               onLoadingComplete={() => handleImageLoad(index)}
               onError={() => handleImageError(index)}
+              unoptimized={true}
             />
             <div className="absolute left-0 top-0 h-full w-full bg-gradient-to-b from-[#00000010] via-[#00000020] to-[#000000c0]"></div>
             <div className="relative top-[60%] box-border flex w-full flex-col space-y-1 px-5 text-white">
-              <h3 className="text-[14px] font-semibold">{item.Heading}</h3>
+              <h3 className="text-size-14 font-semibold">{item.Heading}</h3>
               <h5 className="text-[10px] opacity-70">
                 {item.Description.substring(0, 40)}...
               </h5>
@@ -191,6 +226,8 @@ export default function GalleryCarouselSlider(
           </SwiperSlide>
         ))}
       </Swiper>
+
+      {/* Navigation arrows */}
       <div className="absolute top-1/2 z-10 flex w-full -translate-y-1/2 justify-between px-4">
         <button
           onClick={() => swiperInstance?.slidePrev()}

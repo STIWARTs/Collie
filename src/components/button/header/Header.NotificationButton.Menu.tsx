@@ -181,7 +181,7 @@ function HeaderNotificationButtonMenu(
                   <Image fill src={value.Image} className="rounded-md" alt="" />
                 </div>
                 <div className="h-full w-full items-center overflow-hidden pl-3">
-                  <h2 className="w-full truncate text-left text-[14px] font-[500]">
+                  <h2 className="text-size-14 w-full truncate text-left font-[500]">
                     {value.Heading}
                   </h2>
                   <p className="truncate text-[13px] opacity-75">

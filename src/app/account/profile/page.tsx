@@ -57,21 +57,29 @@ export default function AccountProfilePage() {
     const unsubscribe = onAuthStateChanged(auth, async (user) => {
       if (user) {
         try {
+          // Get user data
+          const displayName = user.displayName || '';
+          const email = user.email || '';
+          const photoURL = user.photoURL || '';
+          
           // Use local state to display user data without MongoDB
           setUserData({
-            name: user.displayName || '',
-            email: user.email || '',
+            name: displayName,
+            email: email,
             phone: '',
             address: '',
-            photoURL: user.photoURL || '',
+            photoURL: photoURL,
           });
 
+          // Set form data separately - don't reference the previous formData state
           setFormData({
-            ...formData,
-            name: user.displayName || '',
-            email: user.email || '',
+            name: displayName,
+            email: email,
             phone: '',
             address: '',
+            currentPassword: '',
+            newPassword: '',
+            confirmPassword: '',
           });
         } catch (error) {
           showToast(
@@ -86,7 +94,7 @@ export default function AccountProfilePage() {
     });
 
     return () => unsubscribe();
-  }, [auth, formData, router, showToast]);
+  }, [auth, router, showToast]); // Remove formData from dependencies
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;

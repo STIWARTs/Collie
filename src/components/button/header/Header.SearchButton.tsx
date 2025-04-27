@@ -87,7 +87,7 @@ function HeaderSearchButton() {
             autoComplete="off"
             className={`${
               Search != 'Search by product, category, collection and more'
-                ? 'text-[14px] text-white'
+                ? 'text-size-14 text-white'
                 : 'text-[13px] text-[#ffffffad]'
             } mr-2 flex h-full w-full truncate bg-transparent pb-[12px] pl-[10px] pt-[10px] outline-none`}
           />

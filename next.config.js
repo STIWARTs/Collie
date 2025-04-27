@@ -6,42 +6,31 @@ const withBundleAnalyzer = require('@next/bundle-analyzer')({
   openAnalyzer: false,
 });
 
+// Simplified configuration to avoid compatibility issues
 const nextConfig = {
-  experimental: {
-    typedRoutes: true,
-    webVitalsAttribution: ['CLS', 'LCP'],
-    optimizeCss: true,
-    optimizePackageImports: [
-      '@mui/material',
-      '@emotion/react',
-      '@emotion/styled',
-      'framer-motion',
-    ],
-    serverActions: {
-      bodySizeLimit: '2mb',
-    },
-  },
-  eslint: {
-    // Warning: This allows production builds to successfully complete even if
-    // your project has ESLint errors.
-    ignoreDuringBuilds: true,
-  },
+  // Basic essential settings
+  reactStrictMode: false, // Disable strict mode for faster development
+  poweredByHeader: false,
   typescript: {
-    // !! WARN !!
-    // Dangerously allow production builds to successfully complete even if
-    // your project has type errors.
-    // !! WARN !!
     ignoreBuildErrors: true,
   },
-  // Configure dynamic pages
-  output: 'standalone', // This is more suitable for Vercel than 'export'
-  serverExternalPackages: ['mongoose'],
-  reactStrictMode: true,
-  poweredByHeader: false,
-  compress: true,
-  compiler: {
-    removeConsole: process.env.NODE_ENV === 'production',
+  eslint: {
+    ignoreDuringBuilds: true,
   },
+  // Optimize compilation
+  swcMinify: true,
+  // Disable static exports to speed up development
+  output: 'standalone',
+  // Reduce build time by disabling some optimizations in dev
+  experimental: {
+    optimizeCss: false,
+    optimizePackageImports: [
+      '@mui/material',
+      'framer-motion',
+      '@heroicons/react',
+    ],
+  },
+  // Image configuration
   images: {
     remotePatterns: [
       {
@@ -54,53 +43,30 @@ const nextConfig = {
         hostname: 'lh3.googleusercontent.com',
       },
     ],
-    deviceSizes: [640, 750, 828, 1080, 1200, 1920],
-    imageSizes: [16, 32, 48, 64, 96, 128, 256, 384],
     formats: ['image/webp'],
-    minimumCacheTTL: 60,
-    dangerouslyAllowSVG: true,
-    contentDispositionType: 'attachment',
-    contentSecurityPolicy: "default-src 'self'; script-src 'none'; sandbox;",
   },
-  // env: { Example: 'value' },
+  // Security headers
   async headers() {
     return [
       {
         source: '/:path*',
-        headers: advancedHeaders,
+        headers: [
+          {
+            key: 'X-Content-Type-Options',
+            value: 'nosniff',
+          },
+          {
+            key: 'X-Frame-Options',
+            value: 'SAMEORIGIN',
+          },
+          {
+            key: 'X-XSS-Protection',
+            value: '1; mode=block',
+          },
+        ],
       },
     ];
   },
 };
 
-const advancedHeaders = [
-  {
-    key: 'X-DNS-Prefetch-Control',
-    value: 'on',
-  },
-  {
-    key: 'Strict-Transport-Security',
-    value: 'max-age=63072000; includeSubDomains; preload',
-  },
-  {
-    key: 'X-XSS-Protection',
-    value: '1; mode=block',
-  },
-  {
-    key: 'X-Frame-Options',
-    value: 'SAMEORIGIN',
-  },
-  {
-    key: 'X-Content-Type-Options',
-    value: 'nosniff',
-  },
-  {
-    key: 'Referrer-Policy',
-    value: 'origin-when-cross-origin',
-  },
-];
-
-module.exports = async () => {
-  const plugins = [withBundleAnalyzer]; //All plugins goes into this array
-  return plugins.reduce((acc, next) => next(acc), nextConfig);
-};
+module.exports = withBundleAnalyzer(nextConfig);

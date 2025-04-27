@@ -7,7 +7,7 @@ interface IProps {
 function UnderlineButtonDark(props: IProps) {
   return (
     <Button
-      className="font-sans button-text-lower m-0 block whitespace-nowrap p-0 text-[14px] font-normal text-white underline-offset-4 hover:underline"
+      className="font-sans button-text-lower text-size-14 m-0 block whitespace-nowrap p-0 font-normal text-white underline-offset-4 hover:underline"
       sx={{
         '.MuiTouchRipple-child': {
           backgroundColor: '#ffffff00 !important',

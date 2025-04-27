@@ -13,7 +13,7 @@ const ContainerStyle =
 const TextContainerStyle = 'px-4 pt-4 pb-[100px] space-y-2';
 const HeadingStyle = 'font-[500] tracking-wide text-left w-full';
 const DescriptionStyle =
-  'text-[14px] whitespace-normal leading-[18px] font-normal text-left w-full opacity-70';
+  'text-size-14 whitespace-normal leading-[18px] font-normal text-left w-full opacity-70';
 const GetColor = (index: number) => {
   if (index === 0) return 'from-dark-red';
   if (index === 1) return 'from-dark-pink';
@@ -47,12 +47,12 @@ export function DiscoverBannerFiveBrowser(
             LargeScreen || MediumLargeScreen
               ? 5
               : MediumScreen
-              ? 4
-              : SmallMediumScreen
-              ? 3
-              : SmallScreen
-              ? 1
-              : 2
+                ? 4
+                : SmallMediumScreen
+                  ? 3
+                  : SmallScreen
+                    ? 1
+                    : 2
           }
           spaceBetween={MediumLargeScreen ? 24 : 15}
           wrapperTag="ul"

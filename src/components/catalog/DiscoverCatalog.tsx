@@ -22,15 +22,15 @@ export default function DiscoverCatalog() {
           />
         </div>
         <div className="relative z-[2] flex h-full w-full max-w-[65%] items-center justify-start small-medium-screen:max-w-[50%] medium-screen:max-w-[35%]">
-          <div className="flex flex-col w-full space-y-2 text-white">
-            <div className="w-full text-[14px] font-[500] small-screen:text-[30px]">
+          <div className="flex w-full flex-col space-y-2 text-white">
+            <div className="text-size-14 w-full font-[500] small-screen:text-[30px]">
               Explore our Gallery
             </div>
             <h6 className="w-full whitespace-normal text-left text-[13px] font-normal leading-[18px] opacity-[0.75] small-screen:text-[16px]">
               Browse by genre, features, price and more to find your next
               favorite look.
             </h6>
-            <div className="flex justify-start w-full">
+            <div className="flex w-full justify-start">
               <Button
                 disableFocusRipple
                 className="button-text-lower cursor-default rounded-lg bg-super-dark-orange px-8 py-2 text-[12px] font-[500] tracking-wide text-white transition-all small-screen:mt-3 small-screen:px-10 small-medium-screen:mt-10"

@@ -1,0 +1,153 @@
+/* 
+ * Mobile-specific styles for Collie
+ * This file contains responsive design fixes for smaller screens
+ */
+
+/* Base mobile styles */
+@media screen and (max-width: 768px) {
+  /* Fix body overflow issues */
+  body {
+    overflow-x: hidden !important;
+    width: 100% !important;
+    max-width: 100vw !important;
+  }
+
+  /* Fix container widths */
+  .container,
+  .container-fluid,
+  div[class^='container'] {
+    padding-left: 0.5rem !important;
+    padding-right: 0.5rem !important;
+    width: 100% !important;
+    max-width: 100vw !important;
+    overflow-x: hidden !important;
+  }
+
+  /* Adjust typography for mobile */
+  h1 {
+    font-size: 1.5rem !important;
+  }
+
+  h2 {
+    font-size: 1.25rem !important;
+  }
+
+  h3,
+  h4 {
+    font-size: 1.1rem !important;
+  }
+
+  p,
+  span,
+  div {
+    font-size: 0.95rem !important;
+  }
+
+  /* Fix navigation and menu items */
+  .navLinks,
+  .navItem,
+  .nav-link {
+    padding: 0.5rem 0.75rem !important;
+  }
+
+  /* Adjust buttons for better tap targets */
+  button,
+  .btn,
+  [role='button'] {
+    min-height: 44px !important;
+    min-width: 44px !important;
+    padding: 0.5rem 0.75rem !important;
+  }
+
+  /* Make form fields easier to use on mobile */
+  input,
+  select,
+  textarea {
+    font-size: 16px !important; /* Prevents iOS zoom on focus */
+    padding: 0.5rem !important;
+  }
+
+  /* Fix layout for shopping items */
+  .shopping-list-item {
+    display: flex !important;
+    flex-direction: row !important;
+    align-items: center !important;
+    padding: 0.75rem !important;
+    margin-bottom: 0.5rem !important;
+  }
+
+  /* Product cards for mobile */
+  .product-card {
+    width: 100% !important;
+    max-width: 100% !important;
+    margin-left: 0 !important;
+    margin-right: 0 !important;
+  }
+
+  /* Improve spacing for stacked elements */
+  .space-y-10 {
+    margin-top: 1.5rem !important;
+    margin-bottom: 1.5rem !important;
+  }
+
+  /* Adjust icon sizes */
+  svg,
+  img[width='20'] {
+    width: 16px !important;
+    height: 16px !important;
+  }
+
+  /* Fix scrolling areas */
+  .scroll,
+  .scrollable,
+  .overflow-auto,
+  .overflow-y-auto {
+    -webkit-overflow-scrolling: touch !important;
+    overflow-y: auto !important;
+  }
+}
+
+/* Small mobile devices (iPhone SE, etc) */
+@media screen and (max-width: 375px) {
+  /* Further reduce padding */
+  .container,
+  .container-fluid {
+    padding-left: 0.25rem !important;
+    padding-right: 0.25rem !important;
+  }
+
+  /* Make font sizes even smaller */
+  p,
+  span,
+  div {
+    font-size: 0.875rem !important;
+  }
+
+  /* Reduce spacing for extremely small screens */
+  .space-y-10 {
+    margin-top: 1rem !important;
+    margin-bottom: 1rem !important;
+  }
+
+  /* Smaller icons */
+  svg,
+  img[width='20'] {
+    width: 14px !important;
+    height: 14px !important;
+  }
+}
+
+/* Fix for landscape mode on mobile */
+@media screen and (max-height: 450px) and (orientation: landscape) {
+  /* Make elements more compact in landscape */
+  .py-5 {
+    padding-top: 0.5rem !important;
+    padding-bottom: 0.5rem !important;
+  }
+
+  /* Reduce vertical spacing */
+  .space-y-10 {
+    margin-top: 0.5rem !important;
+    margin-bottom: 0.5rem !important;
+  }
+}

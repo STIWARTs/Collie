@@ -183,7 +183,7 @@ function SidePanelShoppingList() {
             src="/icons/shopping-cart-fill.svg"
             alt=""
           />
-          <p className="w-full truncate text-left text-[14px] font-[600] tracking-wide text-white opacity-60 group-hover:opacity-100 group-hover:transition-opacity">
+          <p className="text-size-14 w-full truncate text-left font-[600] tracking-wide text-white opacity-60 group-hover:opacity-100 group-hover:transition-opacity">
             Shopping List
           </p>
           <Image

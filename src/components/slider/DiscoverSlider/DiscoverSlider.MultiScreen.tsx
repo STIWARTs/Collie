@@ -1,6 +1,13 @@
 import { DiscoverSliderContentProps } from 'contents/home/discover/Home.Discover.Slider';
-import { useCallback, useEffect, useState } from 'react';
+import { useCallback, useEffect, useState, useRef } from 'react';
 import { Swiper, SwiperSlide } from 'swiper/react';
+import { FreeMode, Mousewheel, Virtual } from 'swiper/modules';
+import SwiperCore from 'swiper';
+import type { Swiper as SwiperType } from 'swiper';
+import 'swiper/css';
+import 'swiper/css/navigation';
+import 'swiper/css/pagination';
+import 'swiper/css/free-mode';
 import { Button } from '@mui/material';
 import { motion } from 'framer-motion';
 import { HeartIcon as HeartIconOutline } from '@heroicons/react/24/outline';
@@ -11,7 +18,7 @@ import ProductContextMenu from 'components/button/ProductContextMenu';
 import { useRouter } from 'next/navigation';
 
 const HeadingStyle =
-  'text-[14px] font-[500] tracking-wide text-left w-full truncate';
+  'text-size-14 font-[500] tracking-wide text-left w-full truncate';
 const DescriptionStyle =
   'text-[13px] font-normal text-left w-full opacity-[0.75] leading-[18px] line-clamp-2';
 const DiscountStyle =
@@ -235,8 +242,48 @@ export interface DiscoverSliderMobileProps {
   Wishlist: number;
   setWishlist: React.Dispatch<React.SetStateAction<number>>;
 }
+
 export function DiscoverSliderMobile(props: DiscoverSliderMobileProps) {
   const router = useRouter();
+  const swiperRef = useRef<SwiperType | null>(null);
+  const [swiperInitialized, setSwiperInitialized] = useState(false);
+
+  // Function to be called from outside to navigate left
+  const slideLeft = useCallback(() => {
+    if (swiperRef.current) {
+      console.log('Sliding left in mobile slider');
+      swiperRef.current.slidePrev();
+    } else {
+      console.error('Swiper instance not available for left navigation');
+    }
+  }, []);
+
+  // Function to be called from outside to navigate right
+  const slideRight = useCallback(() => {
+    if (swiperRef.current) {
+      console.log('Sliding right in mobile slider');
+      swiperRef.current.slideNext();
+    } else {
+      console.error('Swiper instance not available for right navigation');
+    }
+  }, []);
+
+  // Expose the navigation functions - with dependencies to ensure latest instance is used
+  useEffect(() => {
+    if (swiperInitialized) {
+      console.log(
+        'Registering global navigation functions with initialized swiper',
+      );
+      window.slideDiscoverLeft = slideLeft;
+      window.slideDiscoverRight = slideRight;
+
+      return () => {
+        console.log('Unregistering global navigation functions');
+        window.slideDiscoverLeft = undefined;
+        window.slideDiscoverRight = undefined;
+      };
+    }
+  }, [swiperInitialized, slideLeft, slideRight]);
 
   const handleWishlistClick = (index: number) => {
     const product = props.ContentArray[index];
@@ -253,14 +300,33 @@ export function DiscoverSliderMobile(props: DiscoverSliderMobileProps) {
   return (
     <div className="flex h-full w-full">
       <Swiper
-        slidesPerView={2}
-        spaceBetween={15}
+        onSwiper={(swiper) => {
+          console.log('Swiper instance created and stored');
+          swiperRef.current = swiper;
+          setSwiperInitialized(true);
+        }}
+        modules={[FreeMode, Mousewheel, Virtual]}
+        slidesPerView={3}
+        spaceBetween={8}
+        initialSlide={0}
         loop={true}
+        freeMode={{
+          enabled: true,
+          sticky: false,
+          momentumRatio: 0.25,
+          momentumVelocityRatio: 0.5,
+        }}
+        mousewheel={{
+          forceToAxis: true,
+        }}
+        touchRatio={1.5}
+        touchAngle={30}
+        grabCursor={true}
         wrapperTag="ul"
-        className="flex w-full"
+        className="mobile-product-slider flex w-full touch-pan-y"
         style={{
-          paddingLeft: 20,
-          paddingRight: 20,
+          paddingLeft: 12,
+          paddingRight: 12,
         }}
       >
         {props.ContentArray.map((value, index) => (
@@ -271,7 +337,12 @@ export function DiscoverSliderMobile(props: DiscoverSliderMobileProps) {
           >
             <Button
               disableFocusRipple
-              className="button-text-lower group m-0 flex h-full w-full space-y-1 p-0 text-white"
+              onClick={() =>
+                router.push(
+                  `/details?product=${encodeURIComponent(value.Heading)}`,
+                )
+              }
+              className="button-text-lower group m-0 flex h-full w-full flex-col space-y-1 p-1 text-white"
               sx={{
                 '.MuiTouchRipple-child': {
                   backgroundColor: '#ffffff80 !important',
@@ -279,45 +350,46 @@ export function DiscoverSliderMobile(props: DiscoverSliderMobileProps) {
               }}
             >
               <div className="flex w-full flex-col">
-                <div className="relative w-full overflow-hidden">
+                <div className="relative w-full overflow-hidden rounded-lg">
                   <div className="absolute z-[1] flex h-[98%] w-full items-start justify-end rounded-md bg-gradient-to-bl from-[#0000004d] opacity-0 transition-opacity duration-300 group-hover:opacity-100">
-                    <motion.button
-                      onClick={() => handleWishlistClick(index)}
+                    <motion.div
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        handleWishlistClick(index);
+                      }}
                       whileTap={{ scale: 0.9 }}
-                      className="p-2"
+                      className="cursor-pointer p-2"
                     >
                       {props.Wishlist === index ? (
-                        <HeartIconSolid className="h-7 w-7 text-white opacity-100" />
+                        <HeartIconSolid className="h-5 w-5 text-white opacity-100" />
                       ) : (
-                        <HeartIconOutline className="h-7 w-7 text-white opacity-80" />
+                        <HeartIconOutline className="h-5 w-5 text-white opacity-80" />
                       )}
-                    </motion.button>
+                    </motion.div>
                   </div>
                   <Image
-                    height={240}
-                    width={188}
+                    height={150}
+                    width={110}
                     className={ImageStyle}
                     src={value.Image}
                     style={{
                       objectFit: 'cover',
                       objectPosition: 'center',
-                      maxHeight: 240,
-                      maxWidth: 188,
+                      height: 150,
+                      width: '100%',
+                      borderRadius: '8px',
                     }}
                     alt=""
                   />
                 </div>
-                <h6 className={HeadingStyle}>{value.Heading}</h6>
-                <div className="flex items-center space-x-1 pt-2 text-xs sm-500:space-x-2">
-                  <h6 className={`hidden xs-400:block ${DiscountStyle}`}>
-                    {value.Discount}
+                <h6 className="text-size-12 mt-1 w-full truncate text-left font-[500] tracking-wide">
+                  {value.Heading}
+                </h6>
+                <div className="flex items-center space-x-1 text-[10px]">
+                  <h6 className="text-[10px] line-through opacity-70">
+                    ₹{value.OriginalPrice}
                   </h6>
-                  <h6 className={OriginalPriceStyle}>
-                    {`₹${value.OriginalPrice}`}
-                  </h6>
-                  <h6
-                    className={DiscountedPriceStyle}
-                  >{`₹${value.DiscountedPrice}`}</h6>
+                  <h6 className="text-[11px]">₹{value.DiscountedPrice}</h6>
                 </div>
               </div>
             </Button>

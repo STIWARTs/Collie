@@ -7,7 +7,7 @@ import { ArrowLeftIcon } from '@heroicons/react/24/outline';
 import HomeAndGalleryChildLayout from 'components/layout/HomeAndGallery/HomeAndGallery.ChildLayout';
 import HomeAndGalleryParentLayout from 'components/layout/HomeAndGallery/HomeAndGallery.ParentLayout';
 import { NFTCollection } from 'components/nft/NFTCollection';
-import { ConnectWalletButton } from 'components/wallet/ConnectWalletButton';
+import ConnectWalletButton from 'components/wallet/ConnectWalletButton';
 
 export default function CollectionPage() {
   const router = useRouter();

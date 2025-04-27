@@ -22,8 +22,7 @@ export const NFTCollection: React.FC = () => {
       id: 1,
       name: 'Premium Jacket',
       description: 'Digital version of Premium Jacket for virtual worlds',
-      image:
-        'https://firebasestorage.googleapis.com/v0/b/collie-shopping.appspot.com/o/carousel%2Ffit-one.jpg?alt=media',
+      image: '/images/avatar/illustration/6.png',
       price: '0.01 ETH',
       owner: address || '0x0000000000000000000000000000000000000000',
     },
@@ -31,8 +30,7 @@ export const NFTCollection: React.FC = () => {
       id: 2,
       name: 'Designer Shirt',
       description: 'Digital version of Designer Shirt for virtual worlds',
-      image:
-        'https://firebasestorage.googleapis.com/v0/b/collie-shopping.appspot.com/o/carousel%2Ffit-two.jpg?alt=media',
+      image: '/images/avatar/illustration/7.png',
       price: '0.015 ETH',
       owner: address || '0x0000000000000000000000000000000000000000',
     },
@@ -40,8 +38,7 @@ export const NFTCollection: React.FC = () => {
       id: 3,
       name: 'Luxury Suit',
       description: 'Digital version of Luxury Suit for virtual worlds',
-      image:
-        'https://firebasestorage.googleapis.com/v0/b/collie-shopping.appspot.com/o/carousel%2Ffit-three.jpg?alt=media',
+      image: '/images/avatar/illustration/8.png',
       price: '0.02 ETH',
       owner: address || '0x0000000000000000000000000000000000000000',
     },
@@ -54,11 +51,11 @@ export const NFTCollection: React.FC = () => {
       setLoading(true);
       setError(null);
       try {
-        // Simulate API call delay
+        // Reduced delay from 1000ms to 100ms for faster loading
         setTimeout(() => {
           setNfts(mockNFTs);
           setLoading(false);
-        }, 1000);
+        }, 100);
       } catch (err) {
         console.error('Error fetching NFTs:', err);
         setError('Failed to load NFT collection. Please try again later.');
@@ -128,18 +125,17 @@ export const NFTCollection: React.FC = () => {
         Your Digital Fashion Collection
       </h2>
       <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
-        {nfts.map((nft) => (
+        {nfts.map((nft, index) => (
           <div
             key={nft.id}
             className="overflow-hidden rounded-lg bg-[#ffffff10] shadow-lg transition-all hover:shadow-xl"
           >
             <div className="relative h-64 w-full">
-              <Image
+              <img
                 src={nft.image}
                 alt={nft.name}
-                fill
-                style={{ objectFit: 'cover' }}
-                className="transition-transform duration-300 hover:scale-110"
+                className="h-full w-full object-cover transition-transform duration-300 hover:scale-110"
+                loading={index < 3 ? 'eager' : 'lazy'}
               />
             </div>
             <div className="p-4">

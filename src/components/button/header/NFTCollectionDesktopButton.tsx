@@ -1,6 +1,7 @@
 import React from 'react';
 import { NFT_Collection_Link } from 'routers/RouterLinks';
 import { ShimmerButton } from '../../ui/shimmer-button';
+import { useRouter } from 'next/navigation';
 
 interface NFTCollectionDesktopButtonProps {
   onValueChange: (
@@ -11,9 +12,11 @@ interface NFTCollectionDesktopButtonProps {
 export function NFTCollectionDesktopButton({
   onValueChange,
 }: NFTCollectionDesktopButtonProps) {
+  const router = useRouter();
+
   const handleClick = () => {
     onValueChange('NFT Collection');
-    window.location.href = NFT_Collection_Link;
+    router.push(NFT_Collection_Link);
   };
 
   return (
@@ -25,7 +28,13 @@ export function NFTCollectionDesktopButton({
       background="#2A2A2A"
       shimmerDuration="2.5s"
     >
-      <img src="/base-logo.svg" alt="Base" className="h-4 w-4" />
+      <img
+        src="/base-logo.svg"
+        alt="Base"
+        className="h-4 w-4"
+        width={16}
+        height={16}
+      />
       <span>NFT Collection</span>
     </ShimmerButton>
   );

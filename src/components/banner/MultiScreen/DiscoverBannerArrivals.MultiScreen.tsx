@@ -5,7 +5,7 @@ import Image from 'next/image';
 import useScreenSize from 'functions/ScreenSizeDetection';
 
 const HeadingStyle =
-  'text-[14px] font-normal text-left overflow-hidden whitespace-nowrap text-ellipsis';
+  'text-size-14 font-normal text-left overflow-hidden whitespace-nowrap text-ellipsis';
 const DescriptionStyle =
   'text-[13px] whitespace-normal leading-[18px] font-sans font-normal text-left opacity-70 whitespace-nowrap overflow-hidden text-ellipsis';
 const AvailableStyle =
@@ -27,12 +27,12 @@ export function DiscoverBannerArrivalsBrowser(props: IProps) {
         LargeScreen
           ? 5
           : MediumLargeScreen
-          ? 4
-          : MediumScreen
-          ? 3
-          : SmallMediumScreen
-          ? 2
-          : 0,
+            ? 4
+            : MediumScreen
+              ? 3
+              : SmallMediumScreen
+                ? 2
+                : 0,
       ).map((value, index) => (
         <motion.li
           whileTap={{ scale: 0.9 }}
